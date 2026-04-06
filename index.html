@@ -1982,21 +1982,50 @@
             const cx = this.W / 2, cy = this.H / 2;
             const r1 = Math.min(this.W, this.H) * 0.27;
             const branches = [
-                { id:'tech',  label:'Technical',  color:'#4a90d9', angle:-90, subs:['Python','Web Dev','Linux','Machine Learning'] },
-                { id:'art',   label:'Artistic',   color:'#e07c3c', angle:0,   subs:['Drawing','Music','Photography','Design'] },
-                { id:'lang',  label:'Languages',  color:'#5cb85c', angle:90,  subs:['Spanish','Japanese','French','Sign Language'] },
-                { id:'ath',   label:'Athletic',   color:'#9b59b6', angle:180, subs:['Swimming','Climbing','Cycling','Yoga'] },
+                { id:'tech', label:'Technical', color:'#4a90d9', angle:-90, subs:[
+                    { label:'Programming', kids:['Syntax','Algorithms','Debugging'] },
+                    { label:'Web Dev',     kids:['HTML/CSS','JavaScript','Frameworks'] },
+                    { label:'Data',        kids:['Analysis','Visualization','ML'] },
+                    { label:'Systems',     kids:['Linux','Networking','Security'] },
+                ]},
+                { id:'art', label:'Artistic', color:'#e07c3c', angle:0, subs:[
+                    { label:'Drawing',     kids:['Sketching','Shading','Perspective'] },
+                    { label:'Music',       kids:['Theory','Instrument','Ear Training'] },
+                    { label:'Photography', kids:['Composition','Lighting','Editing'] },
+                    { label:'Design',      kids:['Typography','Color','Layout'] },
+                ]},
+                { id:'lang', label:'Languages', color:'#5cb85c', angle:90, subs:[
+                    { label:'Speaking',    kids:['Pronunciation','Fluency','Vocab'] },
+                    { label:'Listening',   kids:['Comprehension','Dictation','Accents'] },
+                    { label:'Reading',     kids:['Grammar','Texts','Speed'] },
+                    { label:'Writing',     kids:['Composition','Script','Style'] },
+                ]},
+                { id:'ath', label:'Athletic', color:'#9b59b6', angle:180, subs:[
+                    { label:'Endurance',   kids:['Running','Swimming','Cycling'] },
+                    { label:'Strength',    kids:['Lifting','Climbing','Gymnastics'] },
+                    { label:'Flexibility', kids:['Yoga','Stretching','Mobility'] },
+                    { label:'Coordination',kids:['Martial Arts','Dance','Sports'] },
+                ]},
             ];
             const nodes = [{ id:'root', label:'YOU', x:cx, y:cy, parent:null, color:'#ffffff', pinned:true }];
             branches.forEach(b => {
                 const a = b.angle * Math.PI / 180;
-                const bx = cx + Math.cos(a) * r1, by = cy + Math.sin(a) * r1;
+                const r1v = r1;
+                const bx = cx + Math.cos(a) * r1v, by = cy + Math.sin(a) * r1v;
                 nodes.push({ id:b.id, label:b.label, x:bx, y:by, parent:'root', color:b.color, pinned:true });
-                const r2 = 120, spread = 0.7;
+                const r2 = 115, spread2 = 0.65;
                 b.subs.forEach((s, i) => {
-                    const total = b.subs.length;
-                    const sa = a + (i - (total-1)/2) * spread / Math.max(1, total-1);
-                    nodes.push({ id:b.id+'_'+i, label:s, x:bx+Math.cos(sa)*r2, y:by+Math.sin(sa)*r2, parent:b.id, color:b.color, pinned:true });
+                    const total2 = b.subs.length;
+                    const sa = a + (i - (total2-1)/2) * spread2 / Math.max(1, total2-1);
+                    const sx = bx + Math.cos(sa) * r2, sy = by + Math.sin(sa) * r2;
+                    const sid = b.id + '_' + i;
+                    nodes.push({ id:sid, label:s.label, x:sx, y:sy, parent:b.id, color:b.color, pinned:true });
+                    const r3 = 80, spread3 = 0.55;
+                    s.kids.forEach((k, j) => {
+                        const total3 = s.kids.length;
+                        const ka = sa + (j - (total3-1)/2) * spread3 / Math.max(1, total3-1);
+                        nodes.push({ id:sid+'_'+j, label:k, x:sx+Math.cos(ka)*r3, y:sy+Math.sin(ka)*r3, parent:sid, color:b.color, pinned:true });
+                    });
                 });
             });
             this.exampleNodes = nodes;
