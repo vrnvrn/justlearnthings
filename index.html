@@ -921,7 +921,7 @@
 <div id="progress-bar"></div>
 
 
-<!-- ===================== SLIDE 1: TITLE ===================== -->
+
 <section class="slide slide-dark" id="s1">
     <div class="slide-content">
         <div class="slide-label">Network School</div>
@@ -930,24 +930,6 @@
     </div>
 </section>
 
-<!-- ===================== SLIDE 1B: MIND MAP ===================== -->
-<section class="slide slide-dark slide-mindmap" id="s-mm">
-    <div class="mm-bar">
-        <div id="mm-tabs" style="display:flex;gap:0.25rem;margin-right:0.75rem;border:1px solid rgba(255,255,255,0.18);border-radius:7px;overflow:hidden;flex-shrink:0;">
-            <button id="mm-tab-mine" onclick="mm.setView('personal')" style="padding:0.3rem 0.8rem;font-size:0.8rem;font-weight:600;border:none;cursor:pointer;background:rgba(255,255,255,0.9);color:#1a1a1a;transition:all 0.15s;">My Skills</button>
-            <button id="mm-tab-example" onclick="mm.setView('example')" style="padding:0.3rem 0.8rem;font-size:0.8rem;font-weight:600;border:none;cursor:pointer;background:transparent;color:rgba(255,255,255,0.55);transition:all 0.15s;">Example</button>
-        </div>
-        <button class="btn btn-sm" id="mm-btn-add" onclick="mm.addSkill()">+ Add Skill</button>
-        <button class="btn btn-sm btn-outline" id="mm-btn-sub" disabled onclick="mm.addSubSkill()">+ Sub-skill</button>
-        <button class="btn btn-sm btn-outline" id="mm-btn-rename" disabled onclick="mm.renameSelected()">Rename</button>
-        <button class="btn btn-sm" id="mm-btn-del" disabled onclick="mm.deleteSelected()" style="background:#c0392b; border:none;">Remove</button>
-        <span class="mm-hint">double-click to rename &nbsp;·&nbsp; drag to reposition</span>
-    </div>
-    <svg id="mm-svg"></svg>
-    <div id="mm-tooltip" class="mm-tooltip"></div>
-</section>
-
-<!-- ===================== SLIDE 2: THE PROBLEM ===================== -->
 <section class="slide slide-white" id="s2">
     <div class="slide-content">
         <div class="slide-label">The Problem</div>
@@ -956,32 +938,6 @@
     </div>
 </section>
 
-<!-- ===================== SLIDE 3: WHAT IS LEARNING SCIENCES ===================== -->
-<section class="slide slide-gray" id="s3">
-    <div class="slide-content">
-        <div class="slide-label">Learning Sciences</div>
-        <h2 class="slide-heading">An interdisciplinary field.</h2>
-        <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
-            <div class="card" style="text-align:center;">
-                <div class="card-icon">🧠</div>
-                <div class="card-title">Cognitive Psychology</div>
-                <div class="card-desc">How the mind processes, stores, and retrieves information</div>
-            </div>
-            <div class="card card-dark" style="text-align:center;">
-                <div class="card-icon">🔬</div>
-                <div class="card-title">Neuroscience</div>
-                <div class="card-desc">What physically happens in the brain when we learn</div>
-            </div>
-            <div class="card" style="text-align:center;">
-                <div class="card-icon">📚</div>
-                <div class="card-title">Education Research</div>
-                <div class="card-desc">What teaching and study methods actually produce results</div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ===================== SLIDE 4: THE PARADOX ===================== -->
 <section class="slide slide-white" id="s4">
     <div class="slide-content">
         <div class="slide-label">The Paradox</div>
@@ -1009,162 +965,148 @@
     </div>
 </section>
 
-<!-- ===================== PART HEADER: HOW YOUR BRAIN LEARNS ===================== -->
-<section class="slide slide-accent" id="s5">
+<section class="slide slide-gray" id="s3">
     <div class="slide-content">
-        <div class="part-number">01</div>
-        <div class="part-label-big">How Your Brain Learns</div>
-        <div class="part-sub">6 techniques from cognitive neuroscience that make learning stick</div>
-    </div>
-</section>
-
-<!-- ===================== SLIDE 6: CHUNKING ===================== -->
-<section class="slide slide-white" id="s6">
-    <div class="slide-content">
-        <div class="slide-label">Technique 1 of 6</div>
-        <h2 class="slide-heading">Chunking</h2>
-        <p class="slide-body">Break complex information into smaller, connected pieces. Your brain masters chunks and links them together. It cannot hold everything at once.</p>
-        <div class="chunk-demo">
-            <div class="chunk-label" id="chunk-label">Raw digits: hard to hold in mind</div>
-            <div class="chunk-display" id="chunk-display">1 8 0 0 5 5 5 1 2 1 2</div>
-            <button class="btn" onclick="toggleChunk()">Toggle Chunking</button>
-        </div>
-    </div>
-</section>
-
-<!-- ===================== SLIDE 7: SPACED REPETITION ===================== -->
-<section class="slide slide-gray" id="s7">
-    <div class="slide-content">
-        <div class="slide-label">Technique 2 of 6</div>
-        <h2 class="slide-heading">Spaced Repetition</h2>
-        <p class="slide-body">Review material at increasing intervals. Your brain consolidates memories during the gaps. Don't cram. Space it out.</p>
-        <div class="spacing-timeline">
-            <div class="timeline-line">
-                <div class="timeline-dot" style="left:0%">
-                    <span class="dot-label">Study</span>
-                    <span class="dot-sub">Day 0</span>
-                </div>
-                <div class="timeline-dot" style="left:18%">
-                    <span class="dot-label">Review</span>
-                    <span class="dot-sub">Day 1</span>
-                </div>
-                <div class="timeline-dot" style="left:38%">
-                    <span class="dot-label">Review</span>
-                    <span class="dot-sub">Day 7</span>
-                </div>
-                <div class="timeline-dot" style="left:62%">
-                    <span class="dot-label">Review</span>
-                    <span class="dot-sub">Day 30</span>
-                </div>
-                <div class="timeline-dot" style="left:88%">
-                    <span class="dot-label">Review</span>
-                    <span class="dot-sub">Day 90</span>
-                </div>
+        <div class="slide-label">Learning Sciences</div>
+        <h2 class="slide-heading">An interdisciplinary field.</h2>
+        <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
+            <div class="card" style="text-align:center;">
+                <div class="card-icon">🧠</div>
+                <div class="card-title">Cognitive Psychology</div>
+                <div class="card-desc">How the mind processes, stores, and retrieves information</div>
             </div>
-        </div>
-        <div class="hbox">
-            <p>Each review resets the forgetting curve from a higher baseline. Four short reviews beat one long cram session.</p>
-        </div>
-    </div>
-</section>
-
-<!-- ===================== SLIDE 8: ACTIVE RECALL ===================== -->
-<section class="slide slide-white" id="s8">
-    <div class="slide-content">
-        <div class="slide-label">Technique 3 of 6</div>
-        <h2 class="slide-heading">Active Recall</h2>
-        <p class="slide-body">Test yourself instead of re-reading. Retrieving information strengthens memory far more than passive review. Close the book and recall.</p>
-        <div class="flip-scene" id="flip-scene" onclick="this.classList.toggle('flipped')">
-            <div class="flip-card">
-                <div class="flip-front">
-                    <div class="q">What is the "testing effect"?</div>
-                    <div class="flip-hint">Click to reveal</div>
-                </div>
-                <div class="flip-back">
-                    <div class="a">Retrieving a memory strengthens it more than re-reading. The act of recall rewrites and reinforces the memory trace each time.</div>
-                    <div class="flip-hint" style="color:#555;">Click to flip back</div>
-                </div>
+            <div class="card card-dark" style="text-align:center;">
+                <div class="card-icon">🔬</div>
+                <div class="card-title">Neuroscience</div>
+                <div class="card-desc">What physically happens in the brain when we learn</div>
+            </div>
+            <div class="card" style="text-align:center;">
+                <div class="card-icon">📚</div>
+                <div class="card-title">Education Research</div>
+                <div class="card-desc">What teaching and study methods actually produce results</div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ===================== SLIDE 9: INTERLEAVING ===================== -->
-<section class="slide slide-gray" id="s9">
+<section class="slide slide-accent" id="s22">
     <div class="slide-content">
-        <div class="slide-label">Technique 4 of 6</div>
-        <h2 class="slide-heading">Interleaving</h2>
-        <p class="slide-body">Mix different problem types and subjects. It feels harder but builds flexibility and deeper understanding than blocked practice.</p>
-        <div class="interleave-demo">
-            <div class="interleave-block">
-                <div class="interleave-title">Blocked (common)</div>
-                <div class="blocks-row">
-                    <div class="b b-a">A</div><div class="b b-a">A</div><div class="b b-a">A</div><div class="b b-a">A</div>
-                    <div class="b b-b">B</div><div class="b b-b">B</div><div class="b b-b">B</div><div class="b b-b">B</div>
-                    <div class="b b-c">C</div><div class="b b-c">C</div><div class="b b-c">C</div><div class="b b-c">C</div>
-                </div>
-                <div style="font-size:0.75rem; color:#888; margin-top:0.6rem;">Feels smooth. Less retention.</div>
-            </div>
-            <div class="interleave-block">
-                <div class="interleave-title">Interleaved (better)</div>
-                <div class="blocks-row">
-                    <div class="b b-a">A</div><div class="b b-c">C</div><div class="b b-b">B</div><div class="b b-a">A</div>
-                    <div class="b b-b">B</div><div class="b b-c">C</div><div class="b b-a">A</div><div class="b b-c">C</div>
-                    <div class="b b-b">B</div><div class="b b-a">A</div><div class="b b-c">C</div><div class="b b-b">B</div>
-                </div>
-                <div style="font-size:0.75rem; color:#2d6a2d; margin-top:0.6rem;">Feels harder. Much deeper learning.</div>
-            </div>
-        </div>
+        <div class="part-number">04</div>
+        <div class="part-label-big">The Brain and Learning</div>
+        <div class="part-sub">What is physically happening as you learn</div>
     </div>
 </section>
 
-<!-- ===================== SLIDE 10: SLEEP ON IT ===================== -->
-<section class="slide slide-white" id="s10">
+<section class="slide slide-white" id="s23">
     <div class="slide-content">
-        <div class="slide-label">Technique 5 of 6</div>
-        <h2 class="slide-heading">Sleep on It</h2>
-        <p class="slide-body">Sleep is when your brain consolidates what you studied, prunes weak connections, and strengthens the important ones.</p>
-        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
-            <div class="card">
-                <div class="card-icon">📖</div>
-                <div class="card-title">Study before sleep</div>
-                <div class="card-desc">Material reviewed close to sleep gets priority consolidation during the night.</div>
-            </div>
-            <div class="card card-dark">
-                <div class="card-icon">🌙</div>
-                <div class="card-title">Sleep processes it</div>
-                <div class="card-desc">The brain replays and integrates the day's learning. Skipping sleep skips consolidation.</div>
-            </div>
+        <div class="slide-label">Neuroscience</div>
+        <h2 class="slide-heading">Synaptic Strengthening</h2>
+        <p class="slide-body">Learning creates new connections between neurons and strengthens existing ones. Every time a neural pathway fires, it becomes easier to fire again.</p>
+        <div class="neuron-visual" id="neuron-visual">
+            <div class="neuron-node" id="n0">Neuron A</div>
+            <div class="neuron-axon" id="ax0"></div>
+            <div class="neuron-node" id="n1">Neuron B</div>
+            <div class="neuron-axon" id="ax1"></div>
+            <div class="neuron-node" id="n2">Neuron C</div>
         </div>
-    </div>
-</section>
-
-<!-- ===================== SLIDE 11: POMODORO ===================== -->
-<section class="slide slide-gray" id="s11">
-    <div class="slide-content">
-        <div class="slide-label">Technique 6 of 6</div>
-        <h2 class="slide-heading">Pomodoro Technique</h2>
-        <p class="slide-body">25 minutes of focused work, then a 5-minute break. The break lets your diffuse mode process what you just learned.</p>
-        <div class="pomo-visual">
-            <div class="pomo-block pomo-work">25 min work</div>
-            <div class="pomo-arrow">→</div>
-            <div class="pomo-block pomo-break">5 min break</div>
-            <div class="pomo-arrow">→</div>
-            <div class="pomo-block pomo-work">25 min work</div>
-            <div class="pomo-arrow">→</div>
-            <div class="pomo-block pomo-break">5 min break</div>
-            <div class="pomo-arrow">→</div>
-            <div class="pomo-block pomo-work">25 min work</div>
-            <div class="pomo-arrow">→</div>
-            <div class="pomo-block pomo-break" style="background:#c8e6c9; font-weight:700;">Long break</div>
+        <div style="display:flex; gap:0.75rem; margin-top:0.5rem;">
+            <button class="btn" onclick="fireNeurons()">Fire the pathway</button>
+            <button class="btn btn-outline" onclick="resetNeurons()">Reset</button>
         </div>
         <div class="hbox" style="margin-top:1.25rem;">
-            <p>After 4 cycles, take a 20-30 minute break. The rhythm matters. Start the timer and commit to the interval.</p>
+            <p><strong>Hebb's Rule:</strong> Neurons that fire together, wire together.</p>
         </div>
     </div>
 </section>
 
-<!-- ===================== PART HEADER: TWO MODES ===================== -->
+<section class="slide slide-gray" id="s24">
+    <div class="slide-content">
+        <div class="slide-label">Neuroscience</div>
+        <h2 class="slide-heading">Neuroplasticity</h2>
+        <p class="slide-body">The brain physically changes with use. The adult brain remains plastic throughout life, reshaping itself in response to what you repeatedly do.</p>
+        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+            <div class="card">
+                <div class="card-icon">🚕</div>
+                <div class="card-title">London Cab Drivers</div>
+                <div class="card-desc">Studies show larger hippocampi compared to non-drivers. The "Knowledge" exam forces years of spatial memorization that physically grows the relevant brain region.</div>
+            </div>
+            <div class="card card-dark">
+                <div class="card-icon">🎹</div>
+                <div class="card-title">Musicians</div>
+                <div class="card-desc">Professional musicians develop denser motor cortex regions corresponding to the fingers they use most. The brain allocates more space to what gets practiced.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== SLIDE: NEURONS ARE LIKE MUSCLE FIBRES ===================== -->
+<section class="slide slide-dark" id="s-muscle">
+    <div class="slide-content">
+        <div class="slide-label">Neuroscience</div>
+        <h2 class="slide-heading">Your brain cells work like muscle fibres.</h2>
+        <p class="slide-body">When you lift weights, muscle fibres experience stress, tear microscopically, and rebuild stronger. Neurons work the same way — challenge triggers growth. A neuron that fires repeatedly builds more receptors, strengthens its synaptic connections, and becomes more efficient. Rest is when the repair happens. No challenge → no growth. This is true for both muscle and brain.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem;">
+            <div class="hbox">
+                <p><strong>🏋️ Muscle</strong><br>Challenge → Micro-tears → Repair → Stronger fibres</p>
+            </div>
+            <div class="hbox">
+                <p><strong>🧠 Neuron</strong><br>Challenge → Synaptic stress → Consolidation → Stronger connections</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== SLIDE: PROGRESSIVE OVERLOAD FOR THE BRAIN ===================== -->
+<section class="slide slide-dark" id="s-overload">
+    <div class="slide-content">
+        <div class="slide-label">Neuroscience</div>
+        <h2 class="slide-heading">Gradually harder = faster growth.</h2>
+        <p class="slide-body">Progressive overload is the gym principle of incrementally increasing load to keep triggering adaptation. The same rule applies to learning. Staying in the comfort zone produces no new synaptic growth — the brain adapts and stops changing. You need to sit just beyond what you can currently do: not so easy the brain coasts, not so hard it shuts down. This is called the "zone of proximal development." Struggling is the signal, not the problem.</p>
+        <div style="margin-top:1.5rem;background:rgba(255,255,255,0.08);border-radius:12px;padding:1.25rem;">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border-radius:8px;overflow:hidden;text-align:center;">
+                <div style="background:rgba(255,255,255,0.06);padding:1rem 0.75rem;">
+                    <div style="font-size:1.4rem;margin-bottom:0.4rem;">😴</div>
+                    <div style="font-weight:700;font-size:0.85rem;color:rgba(255,255,255,0.9);margin-bottom:0.3rem;">Too Easy</div>
+                    <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);">No growth</div>
+                </div>
+                <div style="background:rgba(255,255,255,0.18);padding:1rem 0.75rem;border-left:2px solid rgba(255,255,255,0.25);border-right:2px solid rgba(255,255,255,0.25);">
+                    <div style="font-size:1.4rem;margin-bottom:0.4rem;">🔥</div>
+                    <div style="font-weight:700;font-size:0.85rem;color:white;margin-bottom:0.3rem;">Challenge Zone</div>
+                    <div style="font-size:0.75rem;color:rgba(255,255,255,0.7);">Growth happens here</div>
+                </div>
+                <div style="background:rgba(255,255,255,0.06);padding:1rem 0.75rem;">
+                    <div style="font-size:1.4rem;margin-bottom:0.4rem;">😰</div>
+                    <div style="font-weight:700;font-size:0.85rem;color:rgba(255,255,255,0.9);margin-bottom:0.3rem;">Too Hard</div>
+                    <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);">Overwhelm, shuts down</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-white" id="s25">
+    <div class="slide-content">
+        <div class="slide-label">Neuroscience</div>
+        <h2 class="slide-heading">Myelin and Automaticity</h2>
+        <p class="slide-body">Repeated practice causes myelin, a fatty sheath, to wrap around neural axons. This dramatically speeds up signal transmission. Skills become automatic when the myelin wrapping is thick enough.</p>
+        <div class="hbox" style="margin-top:1.5rem;">
+            <p>This is why deliberate practice matters: you are literally insulating the right circuits. Speed and automaticity are a physical product of repetition.</p>
+        </div>
+        <div class="card-grid card-grid-2" style="margin-top:1.25rem;">
+            <div class="card">
+                <div class="card-icon">🐌</div>
+                <div class="card-title">Unmyelinated pathway</div>
+                <div class="card-desc">Slow, effortful, conscious. Each step requires attention.</div>
+            </div>
+            <div class="card card-dark">
+                <div class="card-icon">⚡</div>
+                <div class="card-title">Myelinated pathway</div>
+                <div class="card-desc">Fast, automatic, unconscious. Frees working memory for higher-level thinking.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <section class="slide slide-accent" id="s12">
     <div class="slide-content">
         <div class="part-number">02</div>
@@ -1173,7 +1115,6 @@
     </div>
 </section>
 
-<!-- ===================== SLIDE 13: MODES OVERVIEW ===================== -->
 <section class="slide slide-white" id="s13">
     <div class="slide-content">
         <div class="slide-label">Two Modes</div>
@@ -1203,7 +1144,6 @@
     </div>
 </section>
 
-<!-- ===================== SLIDE 14: KEY INSIGHT / SHOWER ===================== -->
 <section class="slide slide-gray" id="s14">
     <div class="slide-content">
         <div class="slide-label">Key Insight</div>
@@ -1215,7 +1155,78 @@
     </div>
 </section>
 
-<!-- ===================== PART HEADER: MEMORY ===================== -->
+<section class="slide slide-gray" id="s26">
+    <div class="slide-content">
+        <div class="slide-label">Neuroscience</div>
+        <h2 class="slide-heading">Dopamine and Motivation</h2>
+        <p class="slide-body">Dopamine signals predicted reward and learning salience. It flags information as worth retaining.</p>
+        <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
+            <div class="card" style="text-align:center;">
+                <div class="card-icon">🏆</div>
+                <div class="card-title">Small wins</div>
+                <div class="card-desc">Completing a problem set, finishing a chapter, hitting a milestone</div>
+            </div>
+            <div class="card" style="text-align:center;">
+                <div class="card-icon">📈</div>
+                <div class="card-title">Progress tracking</div>
+                <div class="card-desc">Seeing visible growth maintains the dopamine signal that drives further learning</div>
+            </div>
+            <div class="card" style="text-align:center;">
+                <div class="card-icon">❓</div>
+                <div class="card-title">Curiosity</div>
+                <div class="card-desc">Questions you genuinely want answered spike dopamine. Boredom is the enemy of encoding.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-white" id="s27">
+    <div class="slide-content">
+        <div class="slide-label">Neuroscience</div>
+        <h2 class="slide-heading">Stress and the Amygdala</h2>
+        <p class="slide-body">Moderate stress sharpens focus. High chronic stress floods the brain with cortisol, literally shrinking the hippocampus: the organ most critical for forming new memories.</p>
+        <div class="stress-meter">
+            <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#888; margin-bottom:0.4rem;">
+                <span>Stress level</span>
+                <span id="stress-val">drag to adjust</span>
+            </div>
+            <input type="range" id="stress-slider" min="0" max="100" value="30" oninput="updateStress(this.value)" style="width:100%; cursor:pointer;">
+            <div class="stress-bar-wrap" style="margin-top:0.75rem;">
+                <div class="stress-bar-fill" id="stress-fill" style="width:30%; background:#4caf50;"></div>
+            </div>
+            <div class="stress-labels">
+                <span>No stress (unfocused)</span>
+                <span>Optimal zone</span>
+                <span>Chronic stress (memory damage)</span>
+            </div>
+            <div id="stress-msg" style="margin-top:0.75rem; font-size:0.88rem; color:#555; font-weight:600;"></div>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-gray" id="s28">
+    <div class="slide-content">
+        <div class="slide-label">Neuroscience</div>
+        <h2 class="slide-heading">Sleep's Role in the Brain</h2>
+        <p class="slide-body">During sleep, the brain replays the day's learning, pruning weak connections and strengthening important ones.</p>
+        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+            <div class="card card-dark">
+                <div class="card-icon">🔁</div>
+                <div class="card-title">Memory replay</div>
+                <div class="card-desc">The hippocampus replays recent experiences during slow-wave sleep, transferring them to long-term cortical storage.</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">🧹</div>
+                <div class="card-title">Glymphatic cleaning</div>
+                <div class="card-desc">The glymphatic system flushes metabolic waste from the brain during sleep. Chronic sleep deprivation impairs both memory and executive function.</div>
+            </div>
+        </div>
+        <div class="hbox" style="margin-top:1.25rem;">
+            <p>Managing sleep is neuroscience-backed performance optimization.</p>
+        </div>
+    </div>
+</section>
+
 <section class="slide slide-accent" id="s15">
     <div class="slide-content">
         <div class="part-number">03</div>
@@ -1224,7 +1235,6 @@
     </div>
 </section>
 
-<!-- ===================== SLIDE 16: MEMORY IS NOT A RECORDING ===================== -->
 <section class="slide slide-white" id="s16">
     <div class="slide-content">
         <div class="slide-label">Memory</div>
@@ -1233,7 +1243,6 @@
     </div>
 </section>
 
-<!-- ===================== SLIDE 17: 3 STAGES ===================== -->
 <section class="slide slide-gray" id="s17">
     <div class="slide-content">
         <h2 class="slide-heading">The 3 Stages of Memory</h2>
@@ -1260,7 +1269,6 @@
     </div>
 </section>
 
-<!-- ===================== SLIDE 18: WORKING MEMORY ===================== -->
 <section class="slide slide-white" id="s18">
     <div class="slide-content">
         <div class="slide-label">Memory Type</div>
@@ -1280,7 +1288,6 @@
     </div>
 </section>
 
-<!-- ===================== SLIDE 19: LONG-TERM + PROCEDURAL MEMORY ===================== -->
 <section class="slide slide-gray" id="s19">
     <div class="slide-content">
         <div class="slide-label">Memory Types</div>
@@ -1303,7 +1310,6 @@
     </div>
 </section>
 
-<!-- ===================== SLIDE 20: FORGETTING CURVE ===================== -->
 <section class="slide slide-white" id="s20">
     <div class="slide-content">
         <div class="slide-label">The Forgetting Curve</div>
@@ -1356,7 +1362,235 @@
     </div>
 </section>
 
-<!-- ===================== SLIDE 21: MEMORY PALACE ===================== -->
+<section class="slide slide-accent" id="s5">
+    <div class="slide-content">
+        <div class="part-number">01</div>
+        <div class="part-label-big">How Your Brain Learns</div>
+        <div class="part-sub">6 techniques from cognitive neuroscience that make learning stick</div>
+    </div>
+</section>
+
+<section class="slide slide-white" id="s6">
+    <div class="slide-content">
+        <div class="slide-label">Technique 1 of 6</div>
+        <h2 class="slide-heading">Chunking</h2>
+        <p class="slide-body">Break complex information into smaller, connected pieces. Your brain masters chunks and links them together. It cannot hold everything at once.</p>
+        <div class="chunk-demo">
+            <div class="chunk-label" id="chunk-label">Raw digits: hard to hold in mind</div>
+            <div class="chunk-display" id="chunk-display">1 8 0 0 5 5 5 1 2 1 2</div>
+            <button class="btn" onclick="toggleChunk()">Toggle Chunking</button>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-white" id="s8">
+    <div class="slide-content">
+        <div class="slide-label">Technique 3 of 6</div>
+        <h2 class="slide-heading">Active Recall</h2>
+        <p class="slide-body">Test yourself instead of re-reading. Retrieving information strengthens memory far more than passive review. Close the book and recall.</p>
+        <div class="flip-scene" id="flip-scene" onclick="this.classList.toggle('flipped')">
+            <div class="flip-card">
+                <div class="flip-front">
+                    <div class="q">What is the "testing effect"?</div>
+                    <div class="flip-hint">Click to reveal</div>
+                </div>
+                <div class="flip-back">
+                    <div class="a">Retrieving a memory strengthens it more than re-reading. The act of recall rewrites and reinforces the memory trace each time.</div>
+                    <div class="flip-hint" style="color:#555;">Click to flip back</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-gray" id="s7">
+    <div class="slide-content">
+        <div class="slide-label">Technique 2 of 6</div>
+        <h2 class="slide-heading">Spaced Repetition</h2>
+        <p class="slide-body">Review material at increasing intervals. Your brain consolidates memories during the gaps. Don't cram. Space it out.</p>
+        <div class="spacing-timeline">
+            <div class="timeline-line">
+                <div class="timeline-dot" style="left:0%">
+                    <span class="dot-label">Study</span>
+                    <span class="dot-sub">Day 0</span>
+                </div>
+                <div class="timeline-dot" style="left:18%">
+                    <span class="dot-label">Review</span>
+                    <span class="dot-sub">Day 1</span>
+                </div>
+                <div class="timeline-dot" style="left:38%">
+                    <span class="dot-label">Review</span>
+                    <span class="dot-sub">Day 7</span>
+                </div>
+                <div class="timeline-dot" style="left:62%">
+                    <span class="dot-label">Review</span>
+                    <span class="dot-sub">Day 30</span>
+                </div>
+                <div class="timeline-dot" style="left:88%">
+                    <span class="dot-label">Review</span>
+                    <span class="dot-sub">Day 90</span>
+                </div>
+            </div>
+        </div>
+        <div class="hbox">
+            <p>Each review resets the forgetting curve from a higher baseline. Four short reviews beat one long cram session.</p>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-gray" id="s9">
+    <div class="slide-content">
+        <div class="slide-label">Technique 4 of 6</div>
+        <h2 class="slide-heading">Interleaving</h2>
+        <p class="slide-body">Mix different problem types and subjects. It feels harder but builds flexibility and deeper understanding than blocked practice.</p>
+        <div class="interleave-demo">
+            <div class="interleave-block">
+                <div class="interleave-title">Blocked (common)</div>
+                <div class="blocks-row">
+                    <div class="b b-a">A</div><div class="b b-a">A</div><div class="b b-a">A</div><div class="b b-a">A</div>
+                    <div class="b b-b">B</div><div class="b b-b">B</div><div class="b b-b">B</div><div class="b b-b">B</div>
+                    <div class="b b-c">C</div><div class="b b-c">C</div><div class="b b-c">C</div><div class="b b-c">C</div>
+                </div>
+                <div style="font-size:0.75rem; color:#888; margin-top:0.6rem;">Feels smooth. Less retention.</div>
+            </div>
+            <div class="interleave-block">
+                <div class="interleave-title">Interleaved (better)</div>
+                <div class="blocks-row">
+                    <div class="b b-a">A</div><div class="b b-c">C</div><div class="b b-b">B</div><div class="b b-a">A</div>
+                    <div class="b b-b">B</div><div class="b b-c">C</div><div class="b b-a">A</div><div class="b b-c">C</div>
+                    <div class="b b-b">B</div><div class="b b-a">A</div><div class="b b-c">C</div><div class="b b-b">B</div>
+                </div>
+                <div style="font-size:0.75rem; color:#2d6a2d; margin-top:0.6rem;">Feels harder. Much deeper learning.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-gray" id="s11">
+    <div class="slide-content">
+        <div class="slide-label">Technique 6 of 6</div>
+        <h2 class="slide-heading">Pomodoro Technique</h2>
+        <p class="slide-body">25 minutes of focused work, then a 5-minute break. The break lets your diffuse mode process what you just learned.</p>
+        <div class="pomo-visual">
+            <div class="pomo-block pomo-work">25 min work</div>
+            <div class="pomo-arrow">→</div>
+            <div class="pomo-block pomo-break">5 min break</div>
+            <div class="pomo-arrow">→</div>
+            <div class="pomo-block pomo-work">25 min work</div>
+            <div class="pomo-arrow">→</div>
+            <div class="pomo-block pomo-break">5 min break</div>
+            <div class="pomo-arrow">→</div>
+            <div class="pomo-block pomo-work">25 min work</div>
+            <div class="pomo-arrow">→</div>
+            <div class="pomo-block pomo-break" style="background:#c8e6c9; font-weight:700;">Long break</div>
+        </div>
+        <div class="hbox" style="margin-top:1.25rem;">
+            <p>After 4 cycles, take a 20-30 minute break. The rhythm matters. Start the timer and commit to the interval.</p>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-white" id="s10">
+    <div class="slide-content">
+        <div class="slide-label">Technique 5 of 6</div>
+        <h2 class="slide-heading">Sleep on It</h2>
+        <p class="slide-body">Sleep is when your brain consolidates what you studied, prunes weak connections, and strengthens the important ones.</p>
+        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+            <div class="card">
+                <div class="card-icon">📖</div>
+                <div class="card-title">Study before sleep</div>
+                <div class="card-desc">Material reviewed close to sleep gets priority consolidation during the night.</div>
+            </div>
+            <div class="card card-dark">
+                <div class="card-icon">🌙</div>
+                <div class="card-title">Sleep processes it</div>
+                <div class="card-desc">The brain replays and integrates the day's learning. Skipping sleep skips consolidation.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-accent" id="s29">
+    <div class="slide-content">
+        <div class="part-number">05</div>
+        <div class="part-label-big">How Learning Actually Works</div>
+        <div class="part-sub">Cognition, epistemics, and the mindset that determines your ceiling</div>
+    </div>
+</section>
+
+<section class="slide slide-white" id="s30">
+    <div class="slide-content">
+        <div class="slide-label">Learning Science</div>
+        <h2 class="slide-heading">Desirable Difficulty</h2>
+        <p class="slide-body">Learning feels faster when it is easy. Retention is better when it is hard. Struggling to recall, working through confusion, varying practice conditions: these feel slower but produce deeper learning.</p>
+        <div class="hbox" style="margin-top:1.5rem;">
+            <p><strong>Comfort is a false signal of progress.</strong> The feeling of fluency after re-reading is distinct from actually knowing something.</p>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-gray" id="s31">
+    <div class="slide-content">
+        <div class="slide-label">Learning Science</div>
+        <h2 class="slide-heading">Metacognition</h2>
+        <p class="slide-body">Thinking about your thinking. High performers constantly monitor their own understanding.</p>
+        <div class="flip-scene" id="flip-meta" onclick="this.classList.toggle('flipped')">
+            <div class="flip-card">
+                <div class="flip-front">
+                    <div class="q">Do you actually know this, or do you just recognize it?</div>
+                    <div class="flip-hint">The most important question in learning. Click to see why.</div>
+                </div>
+                <div class="flip-back">
+                    <div class="a">Recognition is easy. Recall is hard. The illusion of knowing is the most common learning mistake. Testing yourself is the only way to break it.</div>
+                    <div class="flip-hint" style="color:#555;">Click to flip back</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-white" id="s32">
+    <div class="slide-content">
+        <div class="slide-label">Learning Science</div>
+        <h2 class="slide-heading">Prior Knowledge as Foundation</h2>
+        <p class="slide-body">New information attaches to existing knowledge structures. The more you know about a domain, the faster you learn in it. Each new concept has more hooks to hang on.</p>
+        <div class="hbox" style="margin-top:1.5rem;">
+            <p>Building foundational knowledge early pays compounding dividends. Domain expertise means both breadth and speed.</p>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-gray" id="s33">
+    <div class="slide-content">
+        <div class="slide-label">Learning Science</div>
+        <h2 class="slide-heading">Transfer of Learning</h2>
+        <p class="slide-body">The ability to apply knowledge in new contexts. Near transfer (similar situations) is common. Far transfer (very different domains) is hard and rare.</p>
+        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+            <div class="card">
+                <div class="card-icon">↔️</div>
+                <div class="card-title">Near Transfer</div>
+                <div class="card-desc">Solving a similar math problem after learning a method. Same domain, different numbers or context.</div>
+            </div>
+            <div class="card card-dark">
+                <div class="card-icon">🌉</div>
+                <div class="card-title">Far Transfer</div>
+                <div class="card-desc">Applying statistical thinking to medical decisions after learning it in economics. Rare. Built through varied practice across multiple contexts.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-white" id="s34">
+    <div class="slide-content">
+        <div class="slide-label">Learning Science</div>
+        <h2 class="slide-heading">Updating Beliefs</h2>
+        <p class="slide-body">Learning requires changing your mind. Confirmation bias, seeking information that confirms what you already believe, is the single biggest obstacle to accurate learning.</p>
+        <div class="hbox" style="margin-top:1.5rem;">
+            <p>The goal is to become <strong>more accurate over time.</strong></p>
+        </div>
+    </div>
+</section>
+
 <section class="slide slide-gray" id="s21">
     <div class="slide-content">
         <div class="slide-label">Memory Technique</div>
@@ -1385,7 +1619,6 @@
     </div>
 </section>
 
-<!-- ===================== SLIDE 21b: 30-SECOND RULE ===================== -->
 <section class="slide slide-white" id="s21b">
     <div class="slide-content">
         <div class="slide-label">Memory Technique</div>
@@ -1414,246 +1647,6 @@
     </div>
 </section>
 
-<!-- ===================== PART HEADER: THE BRAIN ===================== -->
-<section class="slide slide-accent" id="s22">
-    <div class="slide-content">
-        <div class="part-number">04</div>
-        <div class="part-label-big">The Brain and Learning</div>
-        <div class="part-sub">What is physically happening as you learn</div>
-    </div>
-</section>
-
-<!-- ===================== SLIDE 23: SYNAPTIC STRENGTHENING ===================== -->
-<section class="slide slide-white" id="s23">
-    <div class="slide-content">
-        <div class="slide-label">Neuroscience</div>
-        <h2 class="slide-heading">Synaptic Strengthening</h2>
-        <p class="slide-body">Learning creates new connections between neurons and strengthens existing ones. Every time a neural pathway fires, it becomes easier to fire again.</p>
-        <div class="neuron-visual" id="neuron-visual">
-            <div class="neuron-node" id="n0">Neuron A</div>
-            <div class="neuron-axon" id="ax0"></div>
-            <div class="neuron-node" id="n1">Neuron B</div>
-            <div class="neuron-axon" id="ax1"></div>
-            <div class="neuron-node" id="n2">Neuron C</div>
-        </div>
-        <div style="display:flex; gap:0.75rem; margin-top:0.5rem;">
-            <button class="btn" onclick="fireNeurons()">Fire the pathway</button>
-            <button class="btn btn-outline" onclick="resetNeurons()">Reset</button>
-        </div>
-        <div class="hbox" style="margin-top:1.25rem;">
-            <p><strong>Hebb's Rule:</strong> Neurons that fire together, wire together.</p>
-        </div>
-    </div>
-</section>
-
-<!-- ===================== SLIDE 24: NEUROPLASTICITY ===================== -->
-<section class="slide slide-gray" id="s24">
-    <div class="slide-content">
-        <div class="slide-label">Neuroscience</div>
-        <h2 class="slide-heading">Neuroplasticity</h2>
-        <p class="slide-body">The brain physically changes with use. The adult brain remains plastic throughout life, reshaping itself in response to what you repeatedly do.</p>
-        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
-            <div class="card">
-                <div class="card-icon">🚕</div>
-                <div class="card-title">London Cab Drivers</div>
-                <div class="card-desc">Studies show larger hippocampi compared to non-drivers. The "Knowledge" exam forces years of spatial memorization that physically grows the relevant brain region.</div>
-            </div>
-            <div class="card card-dark">
-                <div class="card-icon">🎹</div>
-                <div class="card-title">Musicians</div>
-                <div class="card-desc">Professional musicians develop denser motor cortex regions corresponding to the fingers they use most. The brain allocates more space to what gets practiced.</div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ===================== SLIDE 25: MYELIN ===================== -->
-<section class="slide slide-white" id="s25">
-    <div class="slide-content">
-        <div class="slide-label">Neuroscience</div>
-        <h2 class="slide-heading">Myelin and Automaticity</h2>
-        <p class="slide-body">Repeated practice causes myelin, a fatty sheath, to wrap around neural axons. This dramatically speeds up signal transmission. Skills become automatic when the myelin wrapping is thick enough.</p>
-        <div class="hbox" style="margin-top:1.5rem;">
-            <p>This is why deliberate practice matters: you are literally insulating the right circuits. Speed and automaticity are a physical product of repetition.</p>
-        </div>
-        <div class="card-grid card-grid-2" style="margin-top:1.25rem;">
-            <div class="card">
-                <div class="card-icon">🐌</div>
-                <div class="card-title">Unmyelinated pathway</div>
-                <div class="card-desc">Slow, effortful, conscious. Each step requires attention.</div>
-            </div>
-            <div class="card card-dark">
-                <div class="card-icon">⚡</div>
-                <div class="card-title">Myelinated pathway</div>
-                <div class="card-desc">Fast, automatic, unconscious. Frees working memory for higher-level thinking.</div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ===================== SLIDE 26: DOPAMINE ===================== -->
-<section class="slide slide-gray" id="s26">
-    <div class="slide-content">
-        <div class="slide-label">Neuroscience</div>
-        <h2 class="slide-heading">Dopamine and Motivation</h2>
-        <p class="slide-body">Dopamine signals predicted reward and learning salience. It flags information as worth retaining.</p>
-        <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
-            <div class="card" style="text-align:center;">
-                <div class="card-icon">🏆</div>
-                <div class="card-title">Small wins</div>
-                <div class="card-desc">Completing a problem set, finishing a chapter, hitting a milestone</div>
-            </div>
-            <div class="card" style="text-align:center;">
-                <div class="card-icon">📈</div>
-                <div class="card-title">Progress tracking</div>
-                <div class="card-desc">Seeing visible growth maintains the dopamine signal that drives further learning</div>
-            </div>
-            <div class="card" style="text-align:center;">
-                <div class="card-icon">❓</div>
-                <div class="card-title">Curiosity</div>
-                <div class="card-desc">Questions you genuinely want answered spike dopamine. Boredom is the enemy of encoding.</div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ===================== SLIDE 27: STRESS ===================== -->
-<section class="slide slide-white" id="s27">
-    <div class="slide-content">
-        <div class="slide-label">Neuroscience</div>
-        <h2 class="slide-heading">Stress and the Amygdala</h2>
-        <p class="slide-body">Moderate stress sharpens focus. High chronic stress floods the brain with cortisol, literally shrinking the hippocampus: the organ most critical for forming new memories.</p>
-        <div class="stress-meter">
-            <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#888; margin-bottom:0.4rem;">
-                <span>Stress level</span>
-                <span id="stress-val">drag to adjust</span>
-            </div>
-            <input type="range" id="stress-slider" min="0" max="100" value="30" oninput="updateStress(this.value)" style="width:100%; cursor:pointer;">
-            <div class="stress-bar-wrap" style="margin-top:0.75rem;">
-                <div class="stress-bar-fill" id="stress-fill" style="width:30%; background:#4caf50;"></div>
-            </div>
-            <div class="stress-labels">
-                <span>No stress (unfocused)</span>
-                <span>Optimal zone</span>
-                <span>Chronic stress (memory damage)</span>
-            </div>
-            <div id="stress-msg" style="margin-top:0.75rem; font-size:0.88rem; color:#555; font-weight:600;"></div>
-        </div>
-    </div>
-</section>
-
-<!-- ===================== SLIDE 28: SLEEP BRAIN ===================== -->
-<section class="slide slide-gray" id="s28">
-    <div class="slide-content">
-        <div class="slide-label">Neuroscience</div>
-        <h2 class="slide-heading">Sleep's Role in the Brain</h2>
-        <p class="slide-body">During sleep, the brain replays the day's learning, pruning weak connections and strengthening important ones.</p>
-        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
-            <div class="card card-dark">
-                <div class="card-icon">🔁</div>
-                <div class="card-title">Memory replay</div>
-                <div class="card-desc">The hippocampus replays recent experiences during slow-wave sleep, transferring them to long-term cortical storage.</div>
-            </div>
-            <div class="card">
-                <div class="card-icon">🧹</div>
-                <div class="card-title">Glymphatic cleaning</div>
-                <div class="card-desc">The glymphatic system flushes metabolic waste from the brain during sleep. Chronic sleep deprivation impairs both memory and executive function.</div>
-            </div>
-        </div>
-        <div class="hbox" style="margin-top:1.25rem;">
-            <p>Managing sleep is neuroscience-backed performance optimization.</p>
-        </div>
-    </div>
-</section>
-
-<!-- ===================== PART HEADER: HOW LEARNING WORKS ===================== -->
-<section class="slide slide-accent" id="s29">
-    <div class="slide-content">
-        <div class="part-number">05</div>
-        <div class="part-label-big">How Learning Actually Works</div>
-        <div class="part-sub">Cognition, epistemics, and the mindset that determines your ceiling</div>
-    </div>
-</section>
-
-<!-- ===================== SLIDE 30: DESIRABLE DIFFICULTY ===================== -->
-<section class="slide slide-white" id="s30">
-    <div class="slide-content">
-        <div class="slide-label">Learning Science</div>
-        <h2 class="slide-heading">Desirable Difficulty</h2>
-        <p class="slide-body">Learning feels faster when it is easy. Retention is better when it is hard. Struggling to recall, working through confusion, varying practice conditions: these feel slower but produce deeper learning.</p>
-        <div class="hbox" style="margin-top:1.5rem;">
-            <p><strong>Comfort is a false signal of progress.</strong> The feeling of fluency after re-reading is distinct from actually knowing something.</p>
-        </div>
-    </div>
-</section>
-
-<!-- ===================== SLIDE 31: METACOGNITION ===================== -->
-<section class="slide slide-gray" id="s31">
-    <div class="slide-content">
-        <div class="slide-label">Learning Science</div>
-        <h2 class="slide-heading">Metacognition</h2>
-        <p class="slide-body">Thinking about your thinking. High performers constantly monitor their own understanding.</p>
-        <div class="flip-scene" id="flip-meta" onclick="this.classList.toggle('flipped')">
-            <div class="flip-card">
-                <div class="flip-front">
-                    <div class="q">Do you actually know this, or do you just recognize it?</div>
-                    <div class="flip-hint">The most important question in learning. Click to see why.</div>
-                </div>
-                <div class="flip-back">
-                    <div class="a">Recognition is easy. Recall is hard. The illusion of knowing is the most common learning mistake. Testing yourself is the only way to break it.</div>
-                    <div class="flip-hint" style="color:#555;">Click to flip back</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ===================== SLIDE 32: PRIOR KNOWLEDGE ===================== -->
-<section class="slide slide-white" id="s32">
-    <div class="slide-content">
-        <div class="slide-label">Learning Science</div>
-        <h2 class="slide-heading">Prior Knowledge as Foundation</h2>
-        <p class="slide-body">New information attaches to existing knowledge structures. The more you know about a domain, the faster you learn in it. Each new concept has more hooks to hang on.</p>
-        <div class="hbox" style="margin-top:1.5rem;">
-            <p>Building foundational knowledge early pays compounding dividends. Domain expertise means both breadth and speed.</p>
-        </div>
-    </div>
-</section>
-
-<!-- ===================== SLIDE 33: TRANSFER ===================== -->
-<section class="slide slide-gray" id="s33">
-    <div class="slide-content">
-        <div class="slide-label">Learning Science</div>
-        <h2 class="slide-heading">Transfer of Learning</h2>
-        <p class="slide-body">The ability to apply knowledge in new contexts. Near transfer (similar situations) is common. Far transfer (very different domains) is hard and rare.</p>
-        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
-            <div class="card">
-                <div class="card-icon">↔️</div>
-                <div class="card-title">Near Transfer</div>
-                <div class="card-desc">Solving a similar math problem after learning a method. Same domain, different numbers or context.</div>
-            </div>
-            <div class="card card-dark">
-                <div class="card-icon">🌉</div>
-                <div class="card-title">Far Transfer</div>
-                <div class="card-desc">Applying statistical thinking to medical decisions after learning it in economics. Rare. Built through varied practice across multiple contexts.</div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ===================== SLIDE 34: UPDATING BELIEFS ===================== -->
-<section class="slide slide-white" id="s34">
-    <div class="slide-content">
-        <div class="slide-label">Learning Science</div>
-        <h2 class="slide-heading">Updating Beliefs</h2>
-        <p class="slide-body">Learning requires changing your mind. Confirmation bias, seeking information that confirms what you already believe, is the single biggest obstacle to accurate learning.</p>
-        <div class="hbox" style="margin-top:1.5rem;">
-            <p>The goal is to become <strong>more accurate over time.</strong></p>
-        </div>
-    </div>
-</section>
-
-<!-- ===================== SLIDE 35: PROTEGE EFFECT ===================== -->
 <section class="slide slide-gray" id="s35">
     <div class="slide-content">
         <div class="slide-label">Learning Science</div>
@@ -1679,7 +1672,6 @@
     </div>
 </section>
 
-<!-- ===================== SLIDE 35b: BLOOM'S 2 SIGMA ===================== -->
 <section class="slide slide-gray" id="s35b">
     <div class="slide-content">
         <div class="slide-label">The 2-Sigma Problem</div>
@@ -1714,7 +1706,6 @@
     </div>
 </section>
 
-<!-- ===================== PART HEADER: READING LIST ===================== -->
 <section class="slide slide-accent" id="s36">
     <div class="slide-content">
         <div class="part-number">06</div>
@@ -1722,7 +1713,6 @@
     </div>
 </section>
 
-<!-- ===================== SLIDE 37: A MIND FOR NUMBERS ===================== -->
 <section class="slide slide-white" id="s37">
     <div class="slide-content">
         <span class="tag">Learning Science</span>
@@ -1735,7 +1725,6 @@
     </div>
 </section>
 
-<!-- ===================== SLIDE 38: THINKING FAST AND SLOW ===================== -->
 <section class="slide slide-gray" id="s38">
     <div class="slide-content">
         <span class="tag">Cognitive Psychology</span>
@@ -1748,7 +1737,6 @@
     </div>
 </section>
 
-<!-- ===================== SLIDE 39: MOONWALKING WITH EINSTEIN ===================== -->
 <section class="slide slide-white" id="s39">
     <div class="slide-content">
         <span class="tag">Memory</span>
@@ -1761,7 +1749,6 @@
     </div>
 </section>
 
-<!-- ===================== SLIDE 40: THE SCOUT MINDSET ===================== -->
 <section class="slide slide-gray" id="s40">
     <div class="slide-content">
         <span class="tag">Epistemics</span>
@@ -1774,7 +1761,22 @@
     </div>
 </section>
 
-<!-- ===================== CLOSING SLIDE ===================== -->
+<section class="slide slide-dark slide-mindmap" id="s-mm">
+    <div class="mm-bar">
+        <div id="mm-tabs" style="display:flex;gap:0.25rem;margin-right:0.75rem;border:1px solid rgba(255,255,255,0.18);border-radius:7px;overflow:hidden;flex-shrink:0;">
+            <button id="mm-tab-mine" onclick="mm.setView('personal')" style="padding:0.3rem 0.8rem;font-size:0.8rem;font-weight:600;border:none;cursor:pointer;background:rgba(255,255,255,0.9);color:#1a1a1a;transition:all 0.15s;">My Skills</button>
+            <button id="mm-tab-example" onclick="mm.setView('example')" style="padding:0.3rem 0.8rem;font-size:0.8rem;font-weight:600;border:none;cursor:pointer;background:transparent;color:rgba(255,255,255,0.55);transition:all 0.15s;">Example</button>
+        </div>
+        <button class="btn btn-sm" id="mm-btn-add" onclick="mm.addSkill()">+ Add Skill</button>
+        <button class="btn btn-sm btn-outline" id="mm-btn-sub" disabled onclick="mm.addSubSkill()">+ Sub-skill</button>
+        <button class="btn btn-sm btn-outline" id="mm-btn-rename" disabled onclick="mm.renameSelected()">Rename</button>
+        <button class="btn btn-sm" id="mm-btn-del" disabled onclick="mm.deleteSelected()" style="background:#c0392b; border:none;">Remove</button>
+        <span class="mm-hint">double-click to rename &nbsp;·&nbsp; drag to reposition</span>
+    </div>
+    <svg id="mm-svg"></svg>
+    <div id="mm-tooltip" class="mm-tooltip"></div>
+</section>
+
 <section class="slide slide-dark" id="s41">
     <div class="slide-content">
         <div class="slide-label">End</div>
@@ -1795,7 +1797,6 @@
         </div>
     </div>
 </section>
-
 <footer class="slide-footer">
     Veronica vrn.eth · Network School · March 2026
     <a href="https://github.com/vrnvrn/justlearnthings" target="_blank" rel="noopener" style="color:inherit;opacity:0.6;margin-left:1rem;vertical-align:middle;" aria-label="GitHub">
