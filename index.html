@@ -864,6 +864,21 @@
         /* ============================
            Mind Map Slide
         ============================ */
+        .mm-tooltip {
+            position: fixed;
+            background: rgba(255,255,255,0.93);
+            color: #1a1a1a;
+            padding: 0.3rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            pointer-events: none;
+            z-index: 200;
+            white-space: nowrap;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.35);
+            display: none;
+        }
+
         .slide-mindmap {
             padding: 0;
             background: #111;
@@ -918,13 +933,18 @@
 <!-- ===================== SLIDE 1B: MIND MAP ===================== -->
 <section class="slide slide-dark slide-mindmap" id="s-mm">
     <div class="mm-bar">
-        <button class="btn btn-sm" onclick="mm.addSkill()">+ Add Skill</button>
+        <div id="mm-tabs" style="display:flex;gap:0.25rem;margin-right:0.75rem;border:1px solid rgba(255,255,255,0.18);border-radius:7px;overflow:hidden;flex-shrink:0;">
+            <button id="mm-tab-mine" onclick="mm.setView('personal')" style="padding:0.3rem 0.8rem;font-size:0.8rem;font-weight:600;border:none;cursor:pointer;background:rgba(255,255,255,0.9);color:#1a1a1a;transition:all 0.15s;">My Skills</button>
+            <button id="mm-tab-example" onclick="mm.setView('example')" style="padding:0.3rem 0.8rem;font-size:0.8rem;font-weight:600;border:none;cursor:pointer;background:transparent;color:rgba(255,255,255,0.55);transition:all 0.15s;">Example</button>
+        </div>
+        <button class="btn btn-sm" id="mm-btn-add" onclick="mm.addSkill()">+ Add Skill</button>
         <button class="btn btn-sm btn-outline" id="mm-btn-sub" disabled onclick="mm.addSubSkill()">+ Sub-skill</button>
         <button class="btn btn-sm btn-outline" id="mm-btn-rename" disabled onclick="mm.renameSelected()">Rename</button>
         <button class="btn btn-sm" id="mm-btn-del" disabled onclick="mm.deleteSelected()" style="background:#c0392b; border:none;">Remove</button>
         <span class="mm-hint">double-click to rename &nbsp;·&nbsp; drag to reposition</span>
     </div>
     <svg id="mm-svg"></svg>
+    <div id="mm-tooltip" class="mm-tooltip"></div>
 </section>
 
 <!-- ===================== SLIDE 2: THE PROBLEM ===================== -->
@@ -1928,12 +1948,59 @@
     // ============================================================
     const mm = {
         nodes: [],
+        exampleNodes: [],
+        viewMode: 'personal',
         selected: null,
         dragging: null,
         dragOx: 0, dragOy: 0,
         W: 800, H: 500,
         COLORS: ['#4a90d9','#e07c3c','#5cb85c','#9b59b6','#e91e63','#00bcd4','#ff9800','#ec407a','#26c6da','#ab47bc'],
         NS: 'http://www.w3.org/2000/svg',
+
+        activeNodes() { return this.viewMode === 'example' ? this.exampleNodes : this.nodes; },
+
+        setView(mode) {
+            this.viewMode = mode;
+            this.selected = null;
+            const isExample = mode === 'example';
+            // Tabs
+            document.getElementById('mm-tab-mine').style.background    = isExample ? 'transparent' : 'rgba(255,255,255,0.9)';
+            document.getElementById('mm-tab-mine').style.color         = isExample ? 'rgba(255,255,255,0.55)' : '#1a1a1a';
+            document.getElementById('mm-tab-example').style.background = isExample ? 'rgba(255,255,255,0.9)' : 'transparent';
+            document.getElementById('mm-tab-example').style.color      = isExample ? '#1a1a1a' : 'rgba(255,255,255,0.55)';
+            // Edit controls
+            ['mm-btn-add','mm-btn-sub','mm-btn-rename','mm-btn-del'].forEach(id => {
+                document.getElementById(id).style.opacity = isExample ? '0.3' : '1';
+                document.getElementById(id).style.pointerEvents = isExample ? 'none' : '';
+            });
+            if (isExample && this.exampleNodes.length === 0) this.buildExample();
+            this.updateBtns();
+            this.render();
+        },
+
+        buildExample() {
+            const cx = this.W / 2, cy = this.H / 2;
+            const r1 = Math.min(this.W, this.H) * 0.27;
+            const branches = [
+                { id:'tech',  label:'Technical',  color:'#4a90d9', angle:-90, subs:['Python','Web Dev','Linux','Machine Learning'] },
+                { id:'art',   label:'Artistic',   color:'#e07c3c', angle:0,   subs:['Drawing','Music','Photography','Design'] },
+                { id:'lang',  label:'Languages',  color:'#5cb85c', angle:90,  subs:['Spanish','Japanese','French','Sign Language'] },
+                { id:'ath',   label:'Athletic',   color:'#9b59b6', angle:180, subs:['Swimming','Climbing','Cycling','Yoga'] },
+            ];
+            const nodes = [{ id:'root', label:'YOU', x:cx, y:cy, parent:null, color:'#ffffff', pinned:true }];
+            branches.forEach(b => {
+                const a = b.angle * Math.PI / 180;
+                const bx = cx + Math.cos(a) * r1, by = cy + Math.sin(a) * r1;
+                nodes.push({ id:b.id, label:b.label, x:bx, y:by, parent:'root', color:b.color, pinned:true });
+                const r2 = 120, spread = 0.7;
+                b.subs.forEach((s, i) => {
+                    const total = b.subs.length;
+                    const sa = a + (i - (total-1)/2) * spread / Math.max(1, total-1);
+                    nodes.push({ id:b.id+'_'+i, label:s, x:bx+Math.cos(sa)*r2, y:by+Math.sin(sa)*r2, parent:b.id, color:b.color, pinned:true });
+                });
+            });
+            this.exampleNodes = nodes;
+        },
 
         init() {
             this.svg = document.getElementById('mm-svg');
@@ -1955,6 +2022,7 @@
             this.W = Math.max(r.width  || 0, 400);
             this.H = Math.max(r.height || 0, 400);
             this.svg.setAttribute('viewBox', `0 0 ${this.W} ${this.H}`);
+            if (this.exampleNodes.length > 0) this.buildExample();
             this.render();
         },
 
@@ -1963,13 +2031,12 @@
                 const d = localStorage.getItem('vrn_mindmap');
                 if (d) { this.nodes = JSON.parse(d); return; }
             } catch(e) {}
-            const name = (prompt('Your name for the mind map:') || 'You').trim();
-            this.nodes = [{ id:'root', label:name, x:400, y:300, parent:null, color:'#ffffff', pinned:false }];
+            this.nodes = [{ id:'root', label:'YOU', x:400, y:300, parent:null, color:'#ffffff', pinned:false }];
         },
 
-        save() { localStorage.setItem('vrn_mindmap', JSON.stringify(this.nodes)); },
-        get(id) { return this.nodes.find(n => n.id === id); },
-        kids(id) { return this.nodes.filter(n => n.parent === id); },
+        save() { if (this.viewMode !== 'example') localStorage.setItem('vrn_mindmap', JSON.stringify(this.nodes)); },
+        get(id) { return this.activeNodes().find(n => n.id === id); },
+        kids(id) { return this.activeNodes().filter(n => n.parent === id); },
 
         colorFor(parentId) {
             if (parentId !== 'root') return this.get(parentId)?.color || this.COLORS[0];
@@ -2010,6 +2077,7 @@
         },
 
         addSkill() {
+            if (this.viewMode === 'example') return;
             const label = prompt('Skill name:');
             if (!label?.trim()) return;
             const pos = this.placeNew('root');
@@ -2018,6 +2086,7 @@
         },
 
         addSubSkill() {
+            if (this.viewMode === 'example') return;
             if (!this.selected || this.selected === 'root') return;
             const label = prompt('Sub-skill:');
             if (!label?.trim()) return;
@@ -2027,14 +2096,17 @@
         },
 
         renameSelected() {
+            if (this.viewMode === 'example') return;
             if (!this.selected) return;
             const n = this.get(this.selected);
             if (!n) return;
-            const label = prompt('Rename:', n.label);
+            const promptText = n.id === 'root' ? 'Your name:' : 'Rename:';
+            const label = prompt(promptText, n.id === 'root' && n.label === 'YOU' ? '' : n.label);
             if (label?.trim()) { n.label = label.trim(); this.save(); this.render(); }
         },
 
         deleteSelected() {
+            if (this.viewMode === 'example') return;
             if (!this.selected || this.selected === 'root') return;
             const del = id => { this.kids(id).forEach(c => del(c.id)); this.nodes = this.nodes.filter(n => n.id !== id); };
             del(this.selected);
@@ -2098,7 +2170,7 @@
             root.x = cx; root.y = cy;
 
             // Edges
-            this.nodes.forEach(n => {
+            this.activeNodes().forEach(n => {
                 if (!n.parent) return;
                 const p = this.get(n.parent);
                 if (!p) return;
@@ -2111,7 +2183,7 @@
             });
 
             // Nodes
-            this.nodes.forEach(n => {
+            this.activeNodes().forEach(n => {
                 const isRoot = n.id === 'root';
                 const isL1   = n.parent === 'root';
                 const isSel  = this.selected === n.id;
@@ -2144,7 +2216,19 @@
                 }
 
                 g.addEventListener('mousedown', e => this.onDown(e, n.id));
-                g.addEventListener('dblclick',  e => { e.stopPropagation(); this.selected = n.id; this.renameSelected(); });
+                g.addEventListener('dblclick',  e => { e.stopPropagation(); if (this.viewMode !== 'example') { this.selected = n.id; this.renameSelected(); } });
+
+                if (isRoot && this.viewMode !== 'example') {
+                    const tip = document.getElementById('mm-tooltip');
+                    g.addEventListener('mousemove', e => {
+                        tip.textContent = 'double-click to add your name';
+                        tip.style.display = 'block';
+                        tip.style.left = (e.clientX + 14) + 'px';
+                        tip.style.top  = (e.clientY - 34) + 'px';
+                    });
+                    g.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
+                }
+
                 this.svg.appendChild(g);
             });
         }
