@@ -5,32 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>You Can Just Learn Things</title>
     <style>
+        /* ============================================================
+           DESIGN SYSTEM: Muted Scholarly
+           Soft paper · warm ink · deep-green accent · serif display
+           ============================================================ */
+        :root {
+            --paper:        #f4f3ec;
+            --paper-panel:  #eceadf;
+            --card:         #fbfaf5;
+            --ink:          #1b1e1a;
+            --ink-2:        #454a43;
+            --muted:        #8b8f84;
+            --line:         rgba(27,30,26,0.13);
+            --line-soft:    rgba(27,30,26,0.06);
+            --accent:       #2f6b4f;
+            --accent-deep:  #275a42;
+            --accent-tint:  rgba(47,107,79,0.10);
+            --accent-light: #7cb499;
+            --dark:         #14201a;
+            --dark-2:       #0d1712;
+            --serif: 'Iowan Old Style','Palatino Linotype',Palatino,'Book Antiqua',Georgia,'Times New Roman',serif;
+            --sans: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+            --mono: 'SFMono-Regular','SF Mono',Menlo,Consolas,'Courier New',monospace;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         html { scroll-behavior: smooth; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f5f5;
-            color: #2d3748;
+            font-family: var(--sans);
+            background: var(--paper);
+            color: var(--ink);
             line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
         }
+
+        ::selection { background: var(--accent-tint); }
 
         /* Progress bar */
         #progress-bar {
             position: fixed;
             top: 0; left: 0;
-            height: 3px;
-            background: #fff;
+            height: 2px;
+            background: var(--accent);
             z-index: 1000;
             transition: width 0.1s;
             width: 0%;
         }
 
-        /* Nav */
-        .top-nav {
-            display: none;
-        }
+        /* Nav (legacy, hidden) */
+        .top-nav { display: none; }
 
         .back-btn, .logout-btn {
             color: rgba(255,255,255,0.8);
@@ -38,918 +64,689 @@
             font-size: 0.85rem;
             padding: 0.4rem 0.9rem;
             border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 6px;
+            border-radius: 8px;
             background: transparent;
             cursor: pointer;
             transition: all 0.2s;
         }
-
         .back-btn:hover, .logout-btn:hover {
             background: rgba(255,255,255,0.15);
             color: white;
         }
 
-        /* Slides */
+        /* ============================================================
+           SLIDES
+           ============================================================ */
         .slide {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 5rem 2rem 3rem;
+            padding: 6rem 2.5rem 5rem;
+            position: relative;
         }
 
         .slide-content {
-            max-width: 820px;
+            max-width: 880px;
             width: 100%;
         }
 
-        /* Dark slides (section headers) */
+        /* ---- Centered composition (title, dividers, quotes, prose) ---- */
+        .slide-content.centered {
+            max-width: 760px;
+            margin: 0 auto;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .slide-content.centered .slide-label { justify-content: center; }
+        .slide-content.centered .slide-body { margin-left: auto; margin-right: auto; }
+
+        /* ---- Split composition (text left, visualization right) ---- */
+        .slide-content.split {
+            max-width: 1120px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: minmax(0, 0.92fr) minmax(0, 1fr);
+            column-gap: clamp(2.5rem, 5vw, 5.5rem);
+            row-gap: 2.5rem;
+            align-items: center;
+        }
+        .col-text { align-self: center; }
+        .col-viz  { align-self: center; min-width: 0; }
+        .col-viz > * { margin-top: 0 !important; }
+        .col-viz > * + * { margin-top: 1rem !important; }
+        .col-note {
+            grid-column: 1 / -1;
+            text-align: center;
+        }
+        /* right-column visuals collapse to a single stacked column */
+        .col-viz .card-grid,
+        .col-viz .card-grid-2,
+        .col-viz .card-grid-3,
+        .col-viz .modes-wrap,
+        .col-viz .interleave-demo,
+        .col-viz .mem-types,
+        .col-viz .stages { grid-template-columns: 1fr; margin-top: 0; }
+
+        @media (max-width: 820px) {
+            .slide-content.split {
+                grid-template-columns: 1fr;
+                max-width: 640px;
+                text-align: left;
+            }
+        }
+
+        /* Slide surfaces: alternating paper tints for gentle rhythm */
+        .slide-white { background: var(--paper); }
+        .slide-gray  { background: var(--paper-panel); }
+
+        /* hairline between adjacent light slides */
+        .slide-white + .slide-white,
+        .slide-white + .slide-gray,
+        .slide-gray  + .slide-white,
+        .slide-gray  + .slide-gray {
+            border-top: 1px solid var(--line-soft);
+        }
+
+        /* Dark / divider surfaces */
         .slide-dark {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            color: white;
+            background:
+                radial-gradient(120% 90% at 15% 0%, #1a2a22 0%, var(--dark) 55%, var(--dark-2) 100%);
+            color: var(--paper);
         }
-
-        /* White slides */
-        .slide-white {
-            background: white;
-        }
-
-        /* Gray slides */
-        .slide-gray {
-            background: #f5f5f5;
-        }
-
-        /* Accent slides */
         .slide-accent {
-            background: linear-gradient(135deg, #1a1a1a 0%, #404040 100%);
-            color: white;
+            background:
+                radial-gradient(130% 100% at 85% 100%, #1d3327 0%, var(--dark) 55%, var(--dark-2) 100%);
+            color: var(--paper);
         }
 
-        /* Typography */
+        /* ============================================================
+           TYPOGRAPHY
+           ============================================================ */
         .slide-label {
+            display: inline-block;
             font-size: 0.7rem;
             font-weight: 700;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.16em;
             text-transform: uppercase;
-            color: #888;
-            margin-bottom: 0.75rem;
+            color: var(--accent-deep);
+            margin-bottom: 1.4rem;
         }
-
         .slide-dark .slide-label,
-        .slide-accent .slide-label {
-            color: rgba(255,255,255,0.45);
-        }
+        .slide-accent .slide-label { color: var(--accent-light); }
 
         h1.slide-title {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            font-weight: 700;
-            line-height: 1.1;
-            color: white;
-            margin-bottom: 1rem;
+            font-family: var(--serif);
+            font-size: clamp(2.8rem, 7vw, 5.25rem);
+            font-weight: 600;
+            line-height: 1.02;
+            letter-spacing: -0.02em;
+            color: var(--paper);
+            margin-bottom: 1.25rem;
         }
 
         h2.slide-heading {
-            font-size: clamp(1.8rem, 4vw, 2.8rem);
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 1rem;
+            font-family: var(--serif);
+            font-size: clamp(2rem, 4.6vw, 3.3rem);
+            font-weight: 600;
+            line-height: 1.08;
+            letter-spacing: -0.018em;
+            margin-bottom: 1.25rem;
         }
-
         .slide-dark h2.slide-heading,
-        .slide-accent h2.slide-heading {
-            color: white;
-        }
-
+        .slide-accent h2.slide-heading { color: var(--paper); }
         .slide-white h2.slide-heading,
-        .slide-gray h2.slide-heading {
-            color: #1a1a1a;
-        }
+        .slide-gray  h2.slide-heading { color: var(--ink); }
 
         h3.slide-subheading {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #1a1a1a;
+            font-family: var(--serif);
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--ink);
             margin-bottom: 0.5rem;
         }
-
         .slide-dark h3.slide-subheading,
-        .slide-accent h3.slide-subheading {
-            color: white;
-        }
+        .slide-accent h3.slide-subheading { color: var(--paper); }
 
         .slide-body {
-            font-size: 1.05rem;
-            line-height: 1.7;
-            color: #444;
+            font-size: 1.1rem;
+            line-height: 1.72;
+            color: var(--ink-2);
             max-width: 640px;
         }
-
         .slide-dark .slide-body,
-        .slide-accent .slide-body {
-            color: rgba(255,255,255,0.8);
-        }
+        .slide-accent .slide-body { color: rgba(244,243,236,0.72); }
 
         .big-quote {
-            font-size: clamp(1.4rem, 3vw, 2rem);
-            font-weight: 300;
-            line-height: 1.4;
-            color: #1a1a1a;
-            max-width: 680px;
+            font-family: var(--serif);
+            font-size: clamp(1.9rem, 4vw, 3rem);
+            font-weight: 400;
+            line-height: 1.24;
+            letter-spacing: -0.015em;
+            color: var(--ink);
+            max-width: 800px;
         }
+        .big-quote strong { font-weight: 600; color: var(--accent-deep); }
+        .slide-dark .big-quote { color: var(--paper); }
+        .slide-dark .big-quote strong { color: var(--accent-light); }
 
-        .big-quote strong {
-            font-weight: 700;
-        }
-
-        /* Highlight box */
+        /* Closing sentence: a quiet centered line, no box, no rule */
         .hbox {
-            background: #f8f8f8;
-            border-left: 4px solid #1a1a1a;
-            padding: 1rem 1.25rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1.25rem 0;
-            max-width: 640px;
+            border: none;
+            background: transparent;
+            padding: 0;
+            margin: 2rem auto 0;
+            max-width: 620px;
         }
-
-        .slide-dark .hbox,
-        .slide-accent .hbox {
-            background: rgba(255,255,255,0.1);
-            border-left-color: rgba(255,255,255,0.6);
-        }
-
         .hbox p {
-            font-size: 0.95rem;
-            color: #333;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: var(--muted);
         }
-
+        .hbox p strong { color: var(--ink-2); font-weight: 700; }
+        /* centered slides: sentence sits under the content, centered */
+        .slide-content.centered .hbox { text-align: center; }
         .slide-dark .hbox p,
-        .slide-accent .hbox p {
-            color: rgba(255,255,255,0.85);
-        }
+        .slide-accent .hbox p { color: rgba(244,243,236,0.6); }
+        .slide-dark .hbox p strong,
+        .slide-accent .hbox p strong { color: rgba(244,243,236,0.9); }
 
-        /* Cards / grids */
-        .card-grid {
-            display: grid;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
+        /* ============================================================
+           CARDS & GRIDS
+           ============================================================ */
+        .card-grid { display: grid; gap: 1rem; margin-top: 1.75rem; }
         .card-grid-2 { grid-template-columns: repeat(2, 1fr); }
         .card-grid-3 { grid-template-columns: repeat(3, 1fr); }
 
         .card {
-            background: #f8f8f8;
-            border-radius: 12px;
-            padding: 1.25rem;
+            background: var(--card);
+            border: 1px solid var(--line-soft);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 2px rgba(20,32,26,0.03), 0 14px 30px -20px rgba(20,32,26,0.18);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .card-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.7rem;
+            margin-bottom: 0.85rem;
+            display: block;
+            filter: saturate(0.9);
         }
-
         .card-title {
             font-weight: 700;
-            font-size: 1rem;
-            color: #1a1a1a;
-            margin-bottom: 0.35rem;
+            font-size: 1.02rem;
+            letter-spacing: -0.01em;
+            color: var(--ink);
+            margin-bottom: 0.4rem;
         }
-
         .card-desc {
-            font-size: 0.85rem;
-            color: #555;
-            line-height: 1.5;
+            font-size: 0.88rem;
+            color: var(--ink-2);
+            line-height: 1.6;
         }
 
-        /* Dark card */
         .card-dark {
-            background: #1a1a1a;
-            color: white;
+            background: var(--dark);
+            border-color: transparent;
+            color: var(--paper);
+            box-shadow: 0 14px 34px -18px rgba(20,32,26,0.45);
         }
-
-        .card-dark .card-title { color: white; }
-        .card-dark .card-desc { color: rgba(255,255,255,0.75); }
+        .card-dark .card-title { color: var(--paper); }
+        .card-dark .card-desc  { color: rgba(244,243,236,0.72); }
 
         /* Tag */
         .tag {
             display: inline-block;
             font-size: 0.68rem;
             font-weight: 700;
-            letter-spacing: 0.07em;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            background: #1a1a1a;
-            color: white;
-            padding: 0.2rem 0.55rem;
-            border-radius: 4px;
+            background: var(--accent-tint);
+            color: var(--accent-deep);
+            border: 1px solid rgba(47,107,79,0.25);
+            padding: 0.3rem 0.7rem;
+            border-radius: 999px;
             margin-bottom: 0.5rem;
         }
 
-        /* ============================
-           INTERACTIVE: Chunking Demo
-        ============================ */
-        .chunk-demo {
-            text-align: center;
-            margin-top: 1.5rem;
+        /* ============================================================
+           DIVIDER NUMERALS
+           ============================================================ */
+        .part-number {
+            font-family: var(--serif);
+            font-size: clamp(8rem, 24vw, 18rem);
+            font-weight: 600;
+            color: rgba(124,180,153,0.13);
+            line-height: 0.8;
+            letter-spacing: -0.04em;
+            margin-bottom: 0.5rem;
+        }
+        .part-label-big {
+            font-family: var(--serif);
+            font-size: clamp(2.2rem, 5.2vw, 3.6rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--paper);
+            line-height: 1.08;
+        }
+        .part-sub {
+            font-size: 1.05rem;
+            color: rgba(244,243,236,0.55);
+            margin-top: 1rem;
+            max-width: 520px;
         }
 
+        /* ============================================================
+           BUTTONS
+           ============================================================ */
+        .btn {
+            background: var(--accent);
+            color: var(--paper);
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 10px;
+            font-family: var(--sans);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .btn:hover { background: var(--accent-deep); }
+        .btn:active { transform: translateY(1px); }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--accent-deep);
+            border: 1.5px solid var(--accent);
+        }
+        .btn-outline:hover { background: var(--accent-tint); }
+        .slide-dark .btn-outline,
+        .slide-accent .btn-outline { color: var(--accent-light); border-color: var(--accent-light); }
+        .slide-dark .btn-outline:hover,
+        .slide-accent .btn-outline:hover { background: rgba(124,180,153,0.12); }
+
+        .btn-sm { padding: 0.45rem 1rem; font-size: 0.8rem; }
+
+        /* ============================================================
+           INTERACTIVE: Chunking Demo
+           ============================================================ */
+        .chunk-demo { text-align: center; margin-top: 1.75rem; }
         .chunk-display {
-            font-size: 2.5rem;
-            font-weight: 700;
-            letter-spacing: 0.15em;
-            color: #1a1a1a;
-            font-family: 'Courier New', monospace;
+            font-size: clamp(1.15rem, 1.9vw, 1.65rem);
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+            color: var(--ink);
+            font-family: var(--mono);
             margin-bottom: 1rem;
             min-height: 4rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #f8f8f8;
-            border-radius: 12px;
-            padding: 1rem 2rem;
+            background: var(--card);
+            border: 1px solid var(--line-soft);
+            border-radius: 16px;
+            padding: 1.1rem 1.25rem;
+            box-shadow: 0 14px 30px -22px rgba(20,32,26,0.25);
             transition: all 0.4s;
         }
+        .chunk-display.chunked { letter-spacing: 0.06em; color: var(--accent-deep); }
+        .chunk-label { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.25rem; }
 
-        .chunk-display.chunked {
-            letter-spacing: 0.05em;
-            color: #1a1a1a;
-        }
-
-        .chunk-label {
-            font-size: 0.8rem;
-            color: #888;
-            margin-bottom: 1.25rem;
-        }
-
-        /* ============================
+        /* ============================================================
            INTERACTIVE: Flip Card
-        ============================ */
+           ============================================================ */
         .flip-scene {
-            perspective: 800px;
+            perspective: 1000px;
             width: 100%;
-            max-width: 520px;
-            height: 200px;
-            margin: 1.5rem auto 0;
+            max-width: 540px;
+            height: 210px;
+            margin: 1.75rem auto 0;
             cursor: pointer;
         }
-
         .flip-card {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.5s;
+            transition: transform 0.55s cubic-bezier(0.4,0.1,0.2,1);
         }
-
-        .flip-scene.flipped .flip-card {
-            transform: rotateY(180deg);
-        }
-
+        .flip-scene.flipped .flip-card { transform: rotateY(180deg); }
         .flip-front, .flip-back {
             position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             backface-visibility: hidden;
-            border-radius: 14px;
+            border-radius: 18px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 1.5rem;
+            padding: 1.75rem;
             text-align: center;
         }
-
         .flip-front {
-            background: #1a1a1a;
-            color: white;
+            background:
+                radial-gradient(120% 120% at 20% 0%, #1c2d24 0%, var(--dark) 70%);
+            color: var(--paper);
+            box-shadow: 0 20px 40px -22px rgba(20,32,26,0.55);
         }
-
         .flip-back {
-            background: #e8f5e9;
-            color: #1a1a1a;
+            background: #e6efe9;
+            border: 1px solid rgba(47,107,79,0.18);
+            color: var(--ink);
             transform: rotateY(180deg);
         }
+        .flip-front .q { font-family: var(--serif); font-size: 1.35rem; font-weight: 600; margin-bottom: 0.75rem; line-height: 1.25; }
+        .flip-back .a  { font-size: 0.98rem; line-height: 1.6; color: var(--ink-2); }
+        .flip-hint { font-size: 0.75rem; opacity: 0.55; margin-top: 0.75rem; }
 
-        .flip-front .q {
-            font-size: 1.15rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-
-        .flip-back .a {
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        .flip-hint {
-            font-size: 0.75rem;
-            opacity: 0.5;
-            margin-top: 0.5rem;
-        }
-
-        /* ============================
+        /* ============================================================
            INTERACTIVE: Working Memory
-        ============================ */
-        .wm-slots {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin: 1.5rem 0;
-        }
-
+           ============================================================ */
+        .wm-slots { display: flex; gap: 1rem; justify-content: center; margin: 1.75rem 0; flex-wrap: wrap; }
         .wm-slot {
-            width: 90px;
-            height: 90px;
-            border-radius: 14px;
-            border: 2px dashed #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            color: #ccc;
-            font-weight: 600;
-            transition: all 0.3s;
-            text-align: center;
-            padding: 0.5rem;
+            width: 96px; height: 96px;
+            border-radius: 18px;
+            border: 2px dashed var(--line);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; color: var(--muted); font-weight: 600;
+            transition: all 0.3s; text-align: center; padding: 0.5rem;
+            background: var(--card);
         }
-
         .wm-slot.filled {
-            border: 2px solid #1a1a1a;
-            background: #1a1a1a;
-            color: white;
-            font-size: 0.7rem;
+            border: 2px solid var(--accent);
+            background: var(--accent);
+            color: var(--paper);
+            font-size: 0.72rem;
+            box-shadow: 0 12px 24px -14px rgba(47,107,79,0.5);
         }
-
         .wm-slot.overloaded {
-            border-color: #e53e3e;
-            background: #e53e3e;
+            border-color: #c0392b;
+            background: #c0392b;
+            color: #fff;
             animation: shake 0.4s ease;
         }
-
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-6px); }
             75% { transform: translateX(6px); }
         }
+        .wm-status { text-align: center; font-size: 0.92rem; color: var(--muted); min-height: 1.4rem; }
+        .wm-status.warn { color: #c0392b; font-weight: 700; }
 
-        .wm-status {
-            text-align: center;
-            font-size: 0.9rem;
-            color: #888;
-            min-height: 1.4rem;
-        }
-
-        .wm-status.warn { color: #e53e3e; font-weight: 700; }
-
-        /* ============================
+        /* ============================================================
            INTERACTIVE: Forgetting Curve
-        ============================ */
+           ============================================================ */
         .curve-wrap {
-            margin-top: 1.25rem;
-            background: #f8f8f8;
-            border-radius: 14px;
-            padding: 1.25rem;
-        }
-
-        .curve-wrap svg {
-            width: 100%;
-            height: auto;
-        }
-
-        .curve-controls {
-            display: flex;
-            gap: 0.75rem;
-            margin-top: 0.75rem;
-            flex-wrap: wrap;
-        }
-
-        /* ============================
-           Buttons
-        ============================ */
-        .btn {
-            background: #1a1a1a;
-            color: white;
-            border: none;
-            padding: 0.65rem 1.4rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        .btn:hover { opacity: 0.8; }
-
-        .btn-outline {
-            background: transparent;
-            color: #1a1a1a;
-            border: 2px solid #1a1a1a;
-        }
-
-        .btn-sm {
-            padding: 0.4rem 0.9rem;
-            font-size: 0.8rem;
-        }
-
-        /* Modes side-by-side */
-        .modes-wrap {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .mode-panel {
-            border-radius: 12px;
+            margin-top: 1.5rem;
+            background: var(--card);
+            border: 1px solid var(--line-soft);
+            border-radius: 18px;
             padding: 1.5rem;
+            box-shadow: 0 14px 30px -24px rgba(20,32,26,0.25);
+        }
+        .curve-wrap svg { width: 100%; height: auto; }
+        .curve-controls { display: flex; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap; }
+
+        /* Forgetting-curve slide: graph front, large and centered */
+        .slide-content.curve-slide {
+            max-width: 960px;
+            margin: 0 auto;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .slide-content.curve-slide .slide-label { justify-content: center; }
+        .slide-content.curve-slide .curve-wrap { width: 100%; margin: 1.75rem 0 1.25rem; }
+        .slide-content.curve-slide .curve-controls { justify-content: center; }
+        .slide-content.curve-slide .slide-body { margin: 0 auto; max-width: 640px; }
+
+        /* ============================================================
+           Focused / Diffuse mode panels
+           ============================================================ */
+        .modes-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+        .mode-panel {
+            border-radius: 18px;
+            padding: 1.75rem;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-
-        .mode-panel:hover { transform: translateY(-2px); }
-
+        .mode-panel:hover { transform: translateY(-3px); }
         .mode-panel.focused-panel {
-            background: #1a1a1a;
-            color: white;
+            background: var(--dark);
+            color: var(--paper);
+            box-shadow: 0 20px 40px -24px rgba(20,32,26,0.5);
         }
-
         .mode-panel.diffuse-panel {
-            background: #f0f0f0;
-            color: #1a1a1a;
+            background: var(--card);
+            border: 1px solid var(--line-soft);
+            color: var(--ink);
         }
+        .mode-icon { font-size: 2rem; margin-bottom: 0.6rem; }
+        .mode-name { font-family: var(--serif); font-weight: 600; font-size: 1.3rem; margin-bottom: 0.4rem; }
+        .mode-panel.focused-panel .mode-name { color: var(--paper); }
+        .mode-detail { font-size: 0.84rem; line-height: 1.6; margin-top: 0.85rem; }
+        .mode-panel.focused-panel .mode-detail { color: rgba(244,243,236,0.78); }
+        .mode-panel.diffuse-panel .mode-detail { color: var(--ink-2); }
 
-        .mode-icon { font-size: 2.2rem; margin-bottom: 0.5rem; }
-        .mode-name { font-weight: 700; font-size: 1.15rem; margin-bottom: 0.4rem; }
-
-        .mode-panel.focused-panel .mode-name { color: white; }
-
-        .mode-detail {
-            font-size: 0.82rem;
-            line-height: 1.55;
-            margin-top: 0.75rem;
-        }
-
-        .mode-panel.focused-panel .mode-detail { color: rgba(255,255,255,0.8); }
-        .mode-panel.diffuse-panel .mode-detail { color: #555; }
-
-        /* Stages / timeline */
-        .stages {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-top: 1.25rem;
-        }
-
+        /* ============================================================
+           Stages / timeline boxes (legacy)
+           ============================================================ */
+        .stages { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
         .stage-box {
-            background: #f8f8f8;
-            border-radius: 12px;
-            padding: 1.25rem;
+            background: var(--card);
+            border: 1px solid var(--line-soft);
+            border-radius: 16px;
+            padding: 1.5rem;
             text-align: center;
             cursor: pointer;
-            border: 2px solid transparent;
             transition: all 0.2s;
         }
-
-        .stage-box.active {
-            border-color: #1a1a1a;
-            background: #1a1a1a;
-            color: white;
-        }
-
-        .stage-num {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #ddd;
-            line-height: 1;
-        }
-
-        .stage-box.active .stage-num { color: rgba(255,255,255,0.3); }
-
-        .stage-name {
-            font-weight: 700;
-            font-size: 1rem;
-            color: #1a1a1a;
-            margin: 0.35rem 0;
-        }
-
-        .stage-box.active .stage-name { color: white; }
-
-        .stage-desc {
-            font-size: 0.8rem;
-            color: #666;
-            line-height: 1.5;
-            display: none;
-            margin-top: 0.5rem;
-        }
-
-        .stage-box.active .stage-desc {
-            display: block;
-            color: rgba(255,255,255,0.75);
-        }
-
-        .stage-hint {
-            font-size: 0.72rem;
-            color: #bbb;
-            margin-top: 0.5rem;
-        }
-
+        .stage-box.active { border-color: var(--accent); background: var(--dark); color: var(--paper); }
+        .stage-num { font-family: var(--serif); font-size: 2rem; font-weight: 700; color: var(--line); line-height: 1; }
+        .stage-box.active .stage-num { color: rgba(244,243,236,0.3); }
+        .stage-name { font-weight: 700; font-size: 1rem; color: var(--ink); margin: 0.4rem 0; }
+        .stage-box.active .stage-name { color: var(--paper); }
+        .stage-desc { font-size: 0.82rem; color: var(--ink-2); line-height: 1.55; display: none; margin-top: 0.5rem; }
+        .stage-box.active .stage-desc { display: block; color: rgba(244,243,236,0.78); }
+        .stage-hint { font-size: 0.72rem; color: var(--muted); margin-top: 0.5rem; }
         .stage-box.active .stage-hint { display: none; }
 
-        /* Memory types */
-        .mem-types {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-top: 1.25rem;
-        }
+        .mem-types { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
 
-        /* Interleaving visual */
-        .interleave-demo {
-            margin-top: 1.25rem;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
+        /* ============================================================
+           Interleaving visual
+           ============================================================ */
+        .interleave-demo { margin-top: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
         .interleave-block {
-            border-radius: 10px;
-            padding: 1rem;
-            background: #f8f8f8;
-        }
-
-        .interleave-title {
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.07em;
-            color: #888;
-            margin-bottom: 0.75rem;
-        }
-
-        .blocks-row {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-        }
-
-        .b {
-            width: 30px;
-            height: 30px;
-            border-radius: 5px;
-            font-size: 0.65rem;
-            font-weight: 700;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .b-a { background: #4a90d9; }
-        .b-b { background: #e57c3c; }
-        .b-c { background: #6bbf6b; }
-
-        /* Spaced repetition timeline */
-        .spacing-timeline {
-            margin-top: 1.5rem;
-            position: relative;
-            padding: 0 0 1.5rem;
-        }
-
-        .timeline-line {
-            height: 3px;
-            background: #e0e0e0;
-            border-radius: 2px;
-            position: relative;
-            margin: 2rem 0 1rem;
-        }
-
-        .timeline-dot {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: #1a1a1a;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .timeline-dot:hover { transform: translateY(-50%) scale(1.3); }
-
-        .timeline-dot .dot-label {
-            position: absolute;
-            bottom: 18px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: #1a1a1a;
-            white-space: nowrap;
-        }
-
-        .timeline-dot .dot-sub {
-            position: absolute;
-            top: 18px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.65rem;
-            color: #888;
-            white-space: nowrap;
-        }
-
-        /* Pomodoro visual */
-        .pomo-visual {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 1.25rem;
-            flex-wrap: wrap;
-        }
-
-        .pomo-block {
-            border-radius: 8px;
-            padding: 0.6rem 1rem;
-            font-weight: 700;
-            font-size: 0.85rem;
-        }
-
-        .pomo-work {
-            background: #1a1a1a;
-            color: white;
-        }
-
-        .pomo-break {
-            background: #e8f5e9;
-            color: #2d6a2d;
-            font-size: 0.75rem;
-        }
-
-        .pomo-arrow {
-            color: #ccc;
-            font-size: 1.2rem;
-        }
-
-        /* Book cards (expandable) */
-        .book-card {
-            background: #f8f8f8;
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 1.25rem;
+            background: var(--card);
+            border: 1px solid var(--line-soft);
+        }
+        .interleave-title {
+            font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.85rem;
+        }
+        .blocks-row { display: flex; gap: 5px; flex-wrap: wrap; }
+        .b {
+            width: 32px; height: 32px; border-radius: 7px;
+            font-size: 0.65rem; font-weight: 700; color: white;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .b-a { background: #3f6fb0; }
+        .b-b { background: #c9803f; }
+        .b-c { background: #4f9d5a; }
+
+        /* ============================================================
+           Spaced repetition timeline
+           ============================================================ */
+        .spacing-timeline { margin-top: 1.75rem; position: relative; padding: 0 0 1.5rem; }
+        .timeline-line { height: 2px; background: var(--line); border-radius: 2px; position: relative; margin: 2.25rem 0 1rem; }
+        .timeline-dot {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            width: 14px; height: 14px; border-radius: 50%;
+            background: var(--accent); cursor: pointer; transition: transform 0.2s;
+        }
+        .timeline-dot:hover { transform: translateY(-50%) scale(1.35); }
+        .timeline-dot .dot-label {
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+            font-size: 0.72rem; font-weight: 700; color: var(--ink); white-space: nowrap;
+        }
+        .timeline-dot .dot-sub {
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+            font-size: 0.66rem; color: var(--muted); white-space: nowrap;
+        }
+
+        /* ============================================================
+           Pomodoro visual
+           ============================================================ */
+        .pomo-visual { display: flex; align-items: center; gap: 0.5rem; margin-top: 1.75rem; flex-wrap: wrap; }
+        .pomo-block { border-radius: 10px; padding: 0.65rem 1.05rem; font-weight: 700; font-size: 0.85rem; }
+        .pomo-work { background: var(--dark); color: var(--paper); }
+        .pomo-break { background: var(--accent-tint); color: var(--accent-deep); font-size: 0.75rem; }
+        .pomo-arrow { color: var(--muted); font-size: 1.1rem; }
+
+        /* ============================================================
+           Book cards (legacy expandable)
+           ============================================================ */
+        .book-card {
+            background: var(--card);
+            border: 1px solid var(--line-soft);
+            border-radius: 16px;
+            padding: 1.5rem;
             cursor: pointer;
-            border: 2px solid transparent;
             transition: all 0.2s;
             margin-bottom: 0.75rem;
         }
-
-        .book-card:hover {
-            border-color: #1a1a1a;
-        }
-
-        .book-card.open {
-            background: #1a1a1a;
-            border-color: #1a1a1a;
-        }
-
-        .book-header {
-            display: flex;
-            align-items: baseline;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
-
-        .book-title {
-            font-weight: 700;
-            font-size: 1.05rem;
-            color: #1a1a1a;
-        }
-
-        .book-card.open .book-title { color: white; }
-
-        .book-author {
-            font-size: 0.82rem;
-            color: #888;
-            font-style: italic;
-        }
-
-        .book-card.open .book-author { color: rgba(255,255,255,0.55); }
-
-        .book-expand {
-            display: none;
-            margin-top: 0.75rem;
-        }
-
+        .book-card:hover { border-color: var(--accent); }
+        .book-card.open { background: var(--dark); border-color: var(--dark); }
+        .book-header { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; }
+        .book-title { font-family: var(--serif); font-weight: 600; font-size: 1.1rem; color: var(--ink); }
+        .book-card.open .book-title { color: var(--paper); }
+        .book-author { font-size: 0.82rem; color: var(--muted); font-style: italic; }
+        .book-card.open .book-author { color: rgba(244,243,236,0.55); }
+        .book-expand { display: none; margin-top: 0.85rem; }
         .book-card.open .book-expand { display: block; }
+        .book-desc { font-size: 0.9rem; color: rgba(244,243,236,0.82); line-height: 1.6; margin-bottom: 0.75rem; }
+        .book-core { font-size: 0.82rem; color: rgba(244,243,236,0.6); border-top: 1px solid rgba(244,243,236,0.15); padding-top: 0.65rem; }
+        .book-core strong { color: rgba(244,243,236,0.85); }
 
-        .book-desc {
-            font-size: 0.88rem;
-            color: rgba(255,255,255,0.8);
-            line-height: 1.6;
-            margin-bottom: 0.75rem;
-        }
-
-        .book-core {
-            font-size: 0.82rem;
-            color: rgba(255,255,255,0.6);
-            border-top: 1px solid rgba(255,255,255,0.15);
-            padding-top: 0.6rem;
-        }
-
-        .book-core strong { color: rgba(255,255,255,0.85); }
-
-        /* Divider slide big number */
-        .part-number {
-            font-size: 6rem;
-            font-weight: 800;
-            color: rgba(255,255,255,0.07);
-            line-height: 1;
-            margin-bottom: -1.5rem;
-        }
-
-        .part-label-big {
-            font-size: clamp(1.8rem, 4vw, 3rem);
-            font-weight: 700;
-            color: white;
-            line-height: 1.2;
-        }
-
-        .part-sub {
-            font-size: 1rem;
-            color: rgba(255,255,255,0.5);
-            margin-top: 0.75rem;
-        }
-
-        /* Neuron animation */
-        .neuron-visual {
-            display: flex;
-            align-items: center;
-            gap: 0;
-            margin: 1.5rem 0;
-            justify-content: center;
-        }
-
+        /* ============================================================
+           Neuron animation
+           ============================================================ */
+        .neuron-visual { display: flex; align-items: center; gap: 0; margin: 1.75rem 0; justify-content: center; }
         .neuron-node {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #e0e0e0;
-            border: 3px solid #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.65rem;
-            font-weight: 700;
-            color: #888;
-            transition: all 0.4s;
-            flex-shrink: 0;
+            width: 54px; height: 54px; border-radius: 50%;
+            background: var(--card); border: 3px solid var(--line);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.65rem; font-weight: 700; color: var(--muted);
+            transition: all 0.4s; flex-shrink: 0;
         }
+        .neuron-node.fired { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+        .neuron-axon { height: 3px; width: 62px; background: var(--line); transition: background 0.4s; flex-shrink: 0; }
+        .neuron-axon.fired { background: var(--accent); }
 
-        .neuron-node.fired {
-            background: #1a1a1a;
-            border-color: #1a1a1a;
-            color: white;
-        }
+        /* ============================================================
+           Stress meter
+           ============================================================ */
+        .stress-meter { margin-top: 1.5rem; }
+        .stress-bar-wrap { background: var(--paper-panel); border: 1px solid var(--line-soft); border-radius: 10px; height: 26px; position: relative; overflow: hidden; margin-bottom: 0.5rem; }
+        .stress-bar-fill { height: 100%; border-radius: 10px; transition: width 0.5s, background 0.5s; }
+        .stress-labels { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--muted); }
 
-        .neuron-axon {
-            height: 3px;
-            width: 60px;
-            background: #e0e0e0;
-            transition: background 0.4s;
-            flex-shrink: 0;
-        }
+        /* range input tinting */
+        input[type=range] { accent-color: var(--accent); }
 
-        .neuron-axon.fired { background: #1a1a1a; }
-
-        /* Stress meter */
-        .stress-meter {
-            margin-top: 1.25rem;
-        }
-
-        .stress-bar-wrap {
-            background: #f0f0f0;
-            border-radius: 8px;
-            height: 24px;
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 0.5rem;
-        }
-
-        .stress-bar-fill {
-            height: 100%;
-            border-radius: 8px;
-            transition: width 0.5s, background 0.5s;
-        }
-
-        .stress-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.72rem;
-            color: #888;
-        }
-
-        /* Footer */
+        /* ============================================================
+           Footer
+           ============================================================ */
         .slide-footer {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            bottom: 0; left: 0; right: 0;
             z-index: 998;
             text-align: center;
             padding: 0.6rem 1.5rem;
-            font-size: 0.78rem;
-            background: rgba(26,26,26,0.85);
-            backdrop-filter: blur(6px);
-            color: rgba(255,255,255,0.35);
+            font-size: 0.76rem;
+            background: rgba(244,243,236,0.82);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-top: 1px solid var(--line-soft);
+            color: var(--muted);
         }
 
-        /* ============================
+        /* ============================================================
            Mind Map Slide
-        ============================ */
+           ============================================================ */
         .mm-tooltip {
             position: fixed;
-            background: rgba(255,255,255,0.93);
-            color: #1a1a1a;
+            background: var(--paper);
+            color: var(--ink);
             padding: 0.3rem 0.65rem;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 0.75rem;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: var(--sans);
             pointer-events: none;
             z-index: 200;
             white-space: nowrap;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.35);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.25);
             display: none;
         }
-
-        .slide-mindmap {
-            padding: 0;
-            background: #111;
-            align-items: stretch;
-        }
-
+        .slide-mindmap { padding: 0; background: var(--dark-2); align-items: stretch; }
         .mm-bar {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            padding: 4.5rem 1.5rem 0.75rem;
-            background: rgba(0,0,0,0.5);
-            flex-shrink: 0;
-            flex-wrap: wrap;
-            border-bottom: 1px solid rgba(255,255,255,0.07);
+            display: flex; align-items: center; gap: 0.6rem;
+            padding: 4.5rem 1.5rem 0.85rem;
+            background: rgba(0,0,0,0.35);
+            flex-shrink: 0; flex-wrap: wrap;
+            border-bottom: 1px solid rgba(244,243,236,0.08);
         }
-
-        .mm-hint {
-            font-size: 0.72rem;
-            color: rgba(255,255,255,0.28);
-            margin-left: auto;
-        }
-
-        #mm-svg {
-            flex: 1;
-            min-height: 0;
-            width: 100%;
-            display: block;
-        }
+        .mm-hint { font-size: 0.72rem; color: rgba(244,243,236,0.3); margin-left: auto; }
+        #mm-svg { flex: 1; min-height: 0; width: 100%; display: block; }
 
         @media (max-width: 640px) {
+            .slide { padding: 5rem 1.5rem 5rem; }
             .card-grid-2, .card-grid-3, .modes-wrap, .stages, .mem-types,
             .interleave-demo { grid-template-columns: 1fr; }
-            .wm-slot { width: 70px; height: 70px; }
+            .wm-slot { width: 74px; height: 74px; }
         }
 
-        /* ============================
-           Mode Tabs (Adult / For Kids)
-        ============================ */
+        /* ============================================================
+           Mode Tabs (Original / For Kids / Think Clearly)
+           ============================================================ */
         .mode-tabs {
             position: fixed;
-            top: 14px;
-            right: 14px;
+            top: 14px; right: 14px;
             z-index: 1002;
             display: flex;
-            background: rgba(0,0,0,0.55);
-            border: 1px solid rgba(255,255,255,0.18);
-            border-radius: 8px;
+            background: rgba(244,243,236,0.9);
+            border: 1px solid var(--line);
+            border-radius: 10px;
             overflow: hidden;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 6px 20px -8px rgba(20,32,26,0.35);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
         .mode-tab {
-            padding: 0.4rem 0.95rem;
+            padding: 0.42rem 0.95rem;
             font-size: 0.78rem;
             font-weight: 600;
             background: transparent;
-            color: rgba(255,255,255,0.65);
+            color: var(--ink-2);
             border: none;
             cursor: pointer;
             transition: all 0.15s;
-            font-family: inherit;
+            font-family: var(--sans);
         }
-        .mode-tab:hover { color: rgba(255,255,255,0.95); }
-        .mode-tab.active {
-            background: rgba(255,255,255,0.95);
-            color: #1a1a1a;
-        }
+        .mode-tab:hover { color: var(--ink); }
+        .mode-tab.active { background: var(--accent); color: var(--paper); }
 
         body[data-mode="adult"] .slide-kid { display: none; }
         body[data-mode="kid"] .slide:not(.slide-kid):not(.slide-shared) { display: none; }
+
     </style>
 </head>
 <body data-mode="adult">
@@ -959,12 +756,13 @@
 <div class="mode-tabs" role="tablist">
     <button class="mode-tab active" id="tab-adult" onclick="setMode('adult')" type="button">Original</button>
     <button class="mode-tab" id="tab-kid" onclick="setMode('kid')" type="button">For Kids</button>
+    <a class="mode-tab" href="https://veritatem.vercel.app" style="text-decoration:none;display:flex;align-items:center;border-left:1px solid rgba(255,255,255,0.18);">Think Clearly →</a>
 </div>
 
 
 
 <section class="slide slide-dark" id="s1">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="slide-label">Network School</div>
         <h1 class="slide-title">You Can Just<br>Learn Things</h1>
         <p class="slide-body">Learn how to Learn</p>
@@ -972,7 +770,7 @@
 </section>
 
 <section class="slide slide-white" id="s2">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="slide-label">The Problem</div>
         <p class="big-quote">Most people never learned <strong>how to learn.</strong></p>
         <p class="slide-body" style="margin-top:1.25rem;">We spent years in school. Nobody explained what was actually happening in our brains, why some methods work, or why we forget things we spent hours reading.</p>
@@ -980,10 +778,13 @@
 </section>
 
 <section class="slide slide-white" id="s4">
-    <div class="slide-content">
-        <div class="slide-label">The Paradox</div>
-        <h2 class="slide-heading">Common strategies don't work.</h2>
-        <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">The Paradox</div>
+                <h2 class="slide-heading">Common strategies don't work.</h2>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
             <div class="card" style="text-align:center; opacity:0.5;">
                 <div class="card-icon">📖</div>
                 <div class="card-title" style="text-decoration:line-through;">Re-reading</div>
@@ -1000,17 +801,23 @@
                 <div class="card-desc">Works for tomorrow. Gone by next week.</div>
             </div>
         </div>
-        <div class="hbox" style="margin-top:1.5rem;">
+            </div>
+            <div class="col-note">
+                <div class="hbox" style="margin-top:1.5rem;">
             <p>The strategies that actually work are often counterintuitive. They feel harder. That is the point.</p>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-gray" id="s3">
-    <div class="slide-content">
-        <div class="slide-label">Learning Sciences</div>
-        <h2 class="slide-heading">An interdisciplinary field.</h2>
-        <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Learning Sciences</div>
+                <h2 class="slide-heading">An interdisciplinary field.</h2>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
             <div class="card" style="text-align:center;">
                 <div class="card-icon">🧠</div>
                 <div class="card-title">Cognitive Psychology</div>
@@ -1027,11 +834,12 @@
                 <div class="card-desc">What teaching and study methods actually produce results</div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-accent" id="s22">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="part-number">01</div>
         <div class="part-label-big">The Brain and Learning</div>
         <div class="part-sub">What is physically happening as you learn</div>
@@ -1039,33 +847,42 @@
 </section>
 
 <section class="slide slide-white" id="s23">
-    <div class="slide-content">
-        <div class="slide-label">Neuroscience</div>
-        <h2 class="slide-heading">Synaptic Strengthening</h2>
-        <p class="slide-body">Learning creates new connections between neurons and strengthens existing ones. Every time a neural pathway fires, it becomes easier to fire again.</p>
-        <div class="neuron-visual" id="neuron-visual">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Neuroscience</div>
+                <h2 class="slide-heading">Synaptic Strengthening</h2>
+                <p class="slide-body">Learning creates new connections between neurons and strengthens existing ones. Every time a neural pathway fires, it becomes easier to fire again.</p>
+            </div>
+            <div class="col-viz">
+                <div class="neuron-visual" id="neuron-visual">
             <div class="neuron-node" id="n0">Neuron A</div>
             <div class="neuron-axon" id="ax0"></div>
             <div class="neuron-node" id="n1">Neuron B</div>
             <div class="neuron-axon" id="ax1"></div>
             <div class="neuron-node" id="n2">Neuron C</div>
         </div>
-        <div style="display:flex; gap:0.75rem; margin-top:0.5rem;">
+                <div style="display:flex; gap:0.75rem; margin-top:0.5rem;">
             <button class="btn" onclick="fireNeurons()">Fire the pathway</button>
             <button class="btn btn-outline" onclick="resetNeurons()">Reset</button>
         </div>
-        <div class="hbox" style="margin-top:1.25rem;">
+            </div>
+            <div class="col-note">
+                <div class="hbox" style="margin-top:1.25rem;">
             <p><strong>Hebb's Rule:</strong> Neurons that fire together, wire together.</p>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-gray" id="s24">
-    <div class="slide-content">
-        <div class="slide-label">Neuroscience</div>
-        <h2 class="slide-heading">Neuroplasticity</h2>
-        <p class="slide-body">The brain physically changes with use. The adult brain remains plastic throughout life, reshaping itself in response to what you repeatedly do.</p>
-        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Neuroscience</div>
+                <h2 class="slide-heading">Neuroplasticity</h2>
+                <p class="slide-body">The brain physically changes with use. The adult brain remains plastic throughout life, reshaping itself in response to what you repeatedly do.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
             <div class="card">
                 <div class="card-icon">🚕</div>
                 <div class="card-title">London Cab Drivers</div>
@@ -1077,16 +894,20 @@
                 <div class="card-desc">Professional musicians develop denser motor cortex regions corresponding to the fingers they use most. The brain allocates more space to what gets practiced.</div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <!-- ===================== SLIDE: NEURONS ARE LIKE MUSCLE FIBRES ===================== -->
 <section class="slide slide-dark" id="s-muscle">
-    <div class="slide-content">
-        <div class="slide-label">Neuroscience</div>
-        <h2 class="slide-heading">Your brain cells work like muscle fibres.</h2>
-        <p class="slide-body">When you lift weights, muscle fibres experience stress, tear microscopically, and rebuild stronger. Neurons work the same way. Challenge triggers growth. A neuron that fires repeatedly builds more receptors, strengthens its synaptic connections, and becomes more efficient. Rest is when the repair happens. No challenge → no growth. This is true for both muscle and brain.</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Neuroscience</div>
+                <h2 class="slide-heading">Your brain cells work like muscle fibres.</h2>
+                <p class="slide-body">When you lift weights, muscle fibres tear microscopically and rebuild stronger, and neurons grow the same way when challenged. Repeated firing builds more receptors and stronger connections, and rest is when the repair happens.</p>
+            </div>
+            <div class="col-viz">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem;">
             <div class="hbox">
                 <p><strong>🏋️ Muscle</strong><br>Challenge → Micro-tears → Repair → Stronger fibres</p>
             </div>
@@ -1094,16 +915,20 @@
                 <p><strong>🧠 Neuron</strong><br>Challenge → Synaptic stress → Consolidation → Stronger connections</p>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <!-- ===================== SLIDE: PROGRESSIVE OVERLOAD FOR THE BRAIN ===================== -->
 <section class="slide slide-dark" id="s-overload">
-    <div class="slide-content">
-        <div class="slide-label">Neuroscience</div>
-        <h2 class="slide-heading">Gradually harder = faster growth.</h2>
-        <p class="slide-body">Progressive overload is the gym principle of incrementally increasing load to keep triggering adaptation. The same rule applies to learning. Staying in the comfort zone produces no new synaptic growth. The brain adapts and stops changing. You need to sit just beyond what you can currently do: not so easy the brain coasts, not so hard it shuts down. This is called the "zone of proximal development." Struggling is the signal, not the problem.</p>
-        <div style="margin-top:1.5rem;background:rgba(255,255,255,0.08);border-radius:12px;padding:1.25rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Neuroscience</div>
+                <h2 class="slide-heading">Gradually harder = faster growth.</h2>
+                <p class="slide-body">Progressive overload means nudging just past what you can currently do, because the comfort zone produces no new synaptic growth. This is the zone of proximal development, where a bit of struggle is the signal that the brain is adapting.</p>
+            </div>
+            <div class="col-viz">
+                <div style="margin-top:1.5rem;background:rgba(255,255,255,0.08);border-radius:12px;padding:1.25rem;">
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border-radius:8px;overflow:hidden;text-align:center;">
                 <div style="background:rgba(255,255,255,0.06);padding:1rem 0.75rem;">
                     <div style="font-size:1.4rem;margin-bottom:0.4rem;">😴</div>
@@ -1122,18 +947,19 @@
                 </div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-white" id="s25">
-    <div class="slide-content">
-        <div class="slide-label">Neuroscience</div>
-        <h2 class="slide-heading">Myelin and Automaticity</h2>
-        <p class="slide-body">Repeated practice causes myelin, a fatty sheath, to wrap around neural axons. This dramatically speeds up signal transmission. Skills become automatic when the myelin wrapping is thick enough.</p>
-        <div class="hbox" style="margin-top:1.5rem;">
-            <p>This is why deliberate practice matters: you are literally insulating the right circuits. Speed and automaticity are a physical product of repetition.</p>
-        </div>
-        <div class="card-grid card-grid-2" style="margin-top:1.25rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Neuroscience</div>
+                <h2 class="slide-heading">Myelin and Automaticity</h2>
+                <p class="slide-body">Repeated practice wraps myelin, a fatty sheath, around neural axons, which dramatically speeds up signal transmission. Skills become automatic once the myelin wrapping is thick enough.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-2" style="margin-top:1.25rem;">
             <div class="card">
                 <div class="card-icon">🐌</div>
                 <div class="card-title">Unmyelinated pathway</div>
@@ -1145,11 +971,17 @@
                 <div class="card-desc">Fast, automatic, unconscious. Frees working memory for higher-level thinking.</div>
             </div>
         </div>
-    </div>
+            </div>
+            <div class="col-note">
+                <div class="hbox" style="margin-top:1.5rem;">
+            <p>This is why deliberate practice matters: you are literally insulating the right circuits. Speed and automaticity are a physical product of repetition.</p>
+        </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-accent" id="s12">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="part-number">02</div>
         <div class="part-label-big">Two Modes of Thinking</div>
         <div class="part-sub">Effective learning requires using both</div>
@@ -1157,10 +989,13 @@
 </section>
 
 <section class="slide slide-white" id="s13">
-    <div class="slide-content">
-        <div class="slide-label">Two Modes</div>
-        <h2 class="slide-heading">Your brain runs two very different operating modes.</h2>
-        <div class="modes-wrap">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Two Modes</div>
+                <h2 class="slide-heading">Your brain runs two very different operating modes.</h2>
+            </div>
+            <div class="col-viz">
+                <div class="modes-wrap">
             <div class="mode-panel focused-panel">
                 <div class="mode-icon">🎯</div>
                 <div class="mode-name">Focused Mode</div>
@@ -1182,14 +1017,15 @@
                 </div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-gray" id="s14">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="slide-label">Key Insight</div>
         <p class="big-quote">When you're stuck, <strong>step away.</strong></p>
-        <p class="slide-body" style="margin-top:1.25rem;">Take a walk, grab coffee, chat with someone. Your diffuse mode keeps working on the problem in the background. This is why good ideas come in the shower.</p>
+        <p class="slide-body" style="margin-top:1.25rem;">Take a walk, grab coffee, or chat with someone while your diffuse mode keeps working on the problem in the background. This is why good ideas come in the shower.</p>
         <div class="hbox" style="margin-top:1.5rem;">
             <p>Deliberately switching to diffuse mode after focused work is part of the process.</p>
         </div>
@@ -1197,11 +1033,14 @@
 </section>
 
 <section class="slide slide-gray" id="s26">
-    <div class="slide-content">
-        <div class="slide-label">Neuroscience</div>
-        <h2 class="slide-heading">Dopamine and Motivation</h2>
-        <p class="slide-body">Dopamine signals predicted reward and learning salience. It flags information as worth retaining.</p>
-        <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Neuroscience</div>
+                <h2 class="slide-heading">Dopamine and Motivation</h2>
+                <p class="slide-body">Dopamine signals predicted reward and learning salience. It flags information as worth retaining.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
             <div class="card" style="text-align:center;">
                 <div class="card-icon">🏆</div>
                 <div class="card-title">Small wins</div>
@@ -1218,15 +1057,19 @@
                 <div class="card-desc">Questions you genuinely want answered spike dopamine. Boredom is the enemy of encoding.</div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-white" id="s27">
-    <div class="slide-content">
-        <div class="slide-label">Neuroscience</div>
-        <h2 class="slide-heading">Stress and the Amygdala</h2>
-        <p class="slide-body">Moderate stress sharpens focus. High chronic stress floods the brain with cortisol, literally shrinking the hippocampus: the organ most critical for forming new memories.</p>
-        <div class="stress-meter">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Neuroscience</div>
+                <h2 class="slide-heading">Stress and the Amygdala</h2>
+                <p class="slide-body">Moderate stress sharpens focus. High chronic stress floods the brain with cortisol, literally shrinking the hippocampus: the organ most critical for forming new memories.</p>
+            </div>
+            <div class="col-viz">
+                <div class="stress-meter">
             <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#888; margin-bottom:0.4rem;">
                 <span>Stress level</span>
                 <span id="stress-val">drag to adjust</span>
@@ -1242,15 +1085,19 @@
             </div>
             <div id="stress-msg" style="margin-top:0.75rem; font-size:0.88rem; color:#555; font-weight:600;"></div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-gray" id="s28">
-    <div class="slide-content">
-        <div class="slide-label">Neuroscience</div>
-        <h2 class="slide-heading">Sleep's Role in the Brain</h2>
-        <p class="slide-body">During sleep, the brain replays the day's learning, pruning weak connections and strengthening important ones.</p>
-        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Neuroscience</div>
+                <h2 class="slide-heading">Sleep's Role in the Brain</h2>
+                <p class="slide-body">During sleep, the brain replays the day's learning, pruning weak connections and strengthening important ones.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
             <div class="card card-dark">
                 <div class="card-icon">🔁</div>
                 <div class="card-title">Memory replay</div>
@@ -1262,14 +1109,17 @@
                 <div class="card-desc">The glymphatic system flushes metabolic waste from the brain during sleep. Chronic sleep deprivation impairs both memory and executive function.</div>
             </div>
         </div>
-        <div class="hbox" style="margin-top:1.25rem;">
+            </div>
+            <div class="col-note">
+                <div class="hbox" style="margin-top:1.25rem;">
             <p>Managing sleep is neuroscience-backed performance optimization.</p>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-accent" id="s15">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="part-number">03</div>
         <div class="part-label-big">Memory</div>
         <div class="part-sub">How it forms, why it fades, and how to make it last</div>
@@ -1277,19 +1127,22 @@
 </section>
 
 <section class="slide slide-white" id="s16">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="slide-label">Memory</div>
         <p class="big-quote">Memory is a <strong>reconstruction.</strong></p>
-        <p class="slide-body" style="margin-top:1.25rem;">Every time you remember something, you rebuild it from fragments. That is why memories change, fade, and improve. Understanding the architecture helps you work with it.</p>
+        <p class="slide-body" style="margin-top:1.25rem;">Every time you remember something, you rebuild it from fragments, which is why memories change, fade, and improve. Understanding the architecture helps you work with it.</p>
     </div>
 </section>
 
 <section class="slide slide-gray" id="s17a">
-    <div class="slide-content">
-        <div class="slide-label">Memory · Stage 1 of 3</div>
-        <h2 class="slide-heading">Encoding</h2>
-        <p class="slide-body">Information enters memory through attention. Full attention during study is what allows deep, durable memory traces to form. Multitasking during study produces little to no encoding.</p>
-        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Memory · Stage 1 of 3</div>
+                <h2 class="slide-heading">Encoding</h2>
+                <p class="slide-body">Information enters memory through attention, and full attention during study is what forms deep, durable traces. Multitasking during study produces little to no encoding.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
             <div class="card">
                 <div class="card-icon">🎯</div>
                 <div class="card-title">Attention</div>
@@ -1301,15 +1154,19 @@
                 <div class="card-desc">Linking new material to meaning, emotion, or existing knowledge builds rich, durable traces. The more hooks a memory has, the easier it is to retrieve.</div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-white" id="s17b">
-    <div class="slide-content">
-        <div class="slide-label">Memory · Stage 2 of 3</div>
-        <h2 class="slide-heading">Consolidation</h2>
-        <p class="slide-body">After encoding, memories are fragile. Consolidation stabilises them and integrates new information into existing knowledge structures. It happens primarily during sleep.</p>
-        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Memory · Stage 2 of 3</div>
+                <h2 class="slide-heading">Consolidation</h2>
+                <p class="slide-body">After encoding, memories are fragile until consolidation stabilises them and integrates them into existing knowledge. It happens primarily during sleep.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
             <div class="card card-dark">
                 <div class="card-icon">😴</div>
                 <div class="card-title">Sleep does the work</div>
@@ -1321,18 +1178,19 @@
                 <div class="card-desc">Reviews produce the most durable retention when they happen after consolidation is complete. Spaced repetition is built around this timing.</div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-gray" id="s17c">
-    <div class="slide-content">
-        <div class="slide-label">Memory · Stage 3 of 3</div>
-        <h2 class="slide-heading">Retrieval</h2>
-        <p class="slide-body">Each act of recall rewrites memory. Every retrieval strengthens and updates the memory trace. The act of remembering is itself what builds the memory.</p>
-        <div class="hbox" style="margin-top:1.5rem;">
-            <p>Memory works through reconstruction. When you recall something, you rebuild it from fragments. Each reconstruction makes the next retrieval faster and more accurate.</p>
-        </div>
-        <div class="card-grid card-grid-2" style="margin-top:1.25rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Memory · Stage 3 of 3</div>
+                <h2 class="slide-heading">Retrieval</h2>
+                <p class="slide-body">Each act of recall rewrites memory, strengthening and updating the trace. The act of remembering is itself what builds the memory.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-2" style="margin-top:1.25rem;">
             <div class="card card-dark">
                 <div class="card-icon">🧪</div>
                 <div class="card-title">Active recall</div>
@@ -1344,33 +1202,46 @@
                 <div class="card-desc">Each successful retrieval makes the next one easier. A failed attempt followed by the correct answer produces some of the strongest encoding possible.</div>
             </div>
         </div>
-    </div>
+            </div>
+            <div class="col-note">
+                <div class="hbox" style="margin-top:1.5rem;">
+            <p>Memory works through reconstruction. When you recall something, you rebuild it from fragments. Each reconstruction makes the next retrieval faster and more accurate.</p>
+        </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-white" id="s18">
-    <div class="slide-content">
-        <div class="slide-label">Memory Type</div>
-        <h2 class="slide-heading">Working Memory</h2>
-        <p class="slide-body">Your mental scratch pad. Roughly 4 slots of information held in mind at once. Overloading it is why complex problems feel exhausting. Click to fill it up.</p>
-        <div class="wm-slots" id="wm-slots">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Memory Type</div>
+                <h2 class="slide-heading">Working Memory</h2>
+                <p class="slide-body">Your mental scratch pad holds roughly 4 slots of information at once, which is why complex problems feel exhausting. Click to fill it up.</p>
+            </div>
+            <div class="col-viz">
+                <div class="wm-slots" id="wm-slots">
             <div class="wm-slot" id="wm0">empty</div>
             <div class="wm-slot" id="wm1">empty</div>
             <div class="wm-slot" id="wm2">empty</div>
             <div class="wm-slot" id="wm3">empty</div>
         </div>
-        <div class="wm-status" id="wm-status">0 / 4 slots used</div>
-        <div style="display:flex; gap:0.75rem; margin-top:1rem;">
+                <div class="wm-status" id="wm-status">0 / 4 slots used</div>
+                <div style="display:flex; gap:0.75rem; margin-top:1rem;">
             <button class="btn" onclick="addWMItem()">Add Item</button>
             <button class="btn btn-outline" onclick="resetWM()">Reset</button>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-gray" id="s19">
-    <div class="slide-content">
-        <div class="slide-label">Memory Types</div>
-        <h2 class="slide-heading">Long-Term and Procedural Memory</h2>
-        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Memory Types</div>
+                <h2 class="slide-heading">Long-Term and Procedural Memory</h2>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
             <div class="card card-dark">
                 <div class="card-icon">🗄</div>
                 <div class="card-title">Long-Term Memory</div>
@@ -1382,14 +1253,17 @@
                 <div class="card-desc">Skills and habits: riding a bike, typing, playing an instrument. Built through repetition until automatic. Lives in different brain structures than declarative memory.</div>
             </div>
         </div>
-        <div class="hbox" style="margin-top:1.25rem;">
+            </div>
+            <div class="col-note">
+                <div class="hbox" style="margin-top:1.25rem;">
             <p>Chunking reduces working memory load by moving mastered pieces into long-term memory as single units.</p>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-accent" id="s5">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="part-number">04</div>
         <div class="part-label-big">How Your Brain Learns</div>
         <div class="part-sub">6 techniques from cognitive neuroscience that make learning stick</div>
@@ -1397,24 +1271,31 @@
 </section>
 
 <section class="slide slide-white" id="s6">
-    <div class="slide-content">
-        <div class="slide-label">Technique 1 of 6</div>
-        <h2 class="slide-heading">Chunking</h2>
-        <p class="slide-body">Break complex information into smaller, connected pieces. Your brain masters chunks and links them together. It cannot hold everything at once.</p>
-        <div class="chunk-demo">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Technique 1 of 6</div>
+                <h2 class="slide-heading">Chunking</h2>
+                <p class="slide-body">Break complex information into smaller, connected pieces so your brain can master chunks and link them together. It cannot hold everything at once.</p>
+            </div>
+            <div class="col-viz">
+                <div class="chunk-demo">
             <div class="chunk-label" id="chunk-label">Raw digits: hard to hold in mind</div>
             <div class="chunk-display" id="chunk-display">1 8 0 0 5 5 5 1 2 1 2</div>
             <button class="btn" onclick="toggleChunk()">Toggle Chunking</button>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-white" id="s8">
-    <div class="slide-content">
-        <div class="slide-label">Technique 3 of 6</div>
-        <h2 class="slide-heading">Active Recall</h2>
-        <p class="slide-body">Test yourself. Retrieve the material from memory before looking at your notes. Retrieving information strengthens the memory trace far more than passive review.</p>
-        <div class="flip-scene" id="flip-scene" onclick="this.classList.toggle('flipped')">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Technique 3 of 6</div>
+                <h2 class="slide-heading">Active Recall</h2>
+                <p class="slide-body">Test yourself by retrieving the material from memory before looking at your notes. Retrieval strengthens the memory trace far more than passive review.</p>
+            </div>
+            <div class="col-viz">
+                <div class="flip-scene" id="flip-scene" onclick="this.classList.toggle('flipped')">
             <div class="flip-card">
                 <div class="flip-front">
                     <div class="q">What is the "testing effect"?</div>
@@ -1426,15 +1307,15 @@
                 </div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-white" id="s20">
-    <div class="slide-content">
-        <div class="slide-label">The Forgetting Curve</div>
-        <h2 class="slide-heading">Without review, retention collapses fast.</h2>
-        <p class="slide-body">Ebbinghaus documented this in 1885. You forget roughly 50% within a day and 90% within a week. Spaced review resets the curve each time.</p>
-        <div class="curve-wrap">
+    <div class="slide-content curve-slide">
+            <div class="slide-label">The Forgetting Curve</div>
+            <h2 class="slide-heading">Without review, retention collapses fast.</h2>
+            <div class="curve-wrap">
             <svg viewBox="0 0 600 220" id="curve-svg">
                 <!-- Axes -->
                 <line x1="40" y1="10" x2="40" y2="185" stroke="#ccc" stroke-width="1.5"/>
@@ -1478,15 +1359,19 @@
                 <button class="btn btn-sm btn-outline" onclick="hideCurveReview()">Reset</button>
             </div>
         </div>
-    </div>
+            <p class="slide-body">Ebbinghaus documented this in 1885: you forget roughly 50% within a day and 90% within a week. Spaced review resets the curve each time.</p>
+        </div>
 </section>
 
 <section class="slide slide-gray" id="s7">
-    <div class="slide-content">
-        <div class="slide-label">Technique 2 of 6</div>
-        <h2 class="slide-heading">Spaced Repetition</h2>
-        <p class="slide-body">Review material at increasing intervals. Your brain consolidates memories during the gaps. Don't cram. Space it out.</p>
-        <div class="spacing-timeline">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Technique 2 of 6</div>
+                <h2 class="slide-heading">Spaced Repetition</h2>
+                <p class="slide-body">Review material at increasing intervals so your brain consolidates memories during the gaps. Space it out instead of cramming.</p>
+            </div>
+            <div class="col-viz">
+                <div class="spacing-timeline">
             <div class="timeline-line">
                 <div class="timeline-dot" style="left:0%">
                     <span class="dot-label">Study</span>
@@ -1510,18 +1395,24 @@
                 </div>
             </div>
         </div>
-        <div class="hbox">
+            </div>
+            <div class="col-note">
+                <div class="hbox">
             <p>Each review resets the forgetting curve from a higher baseline. Four short reviews beat one long cram session.</p>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-gray" id="s9">
-    <div class="slide-content">
-        <div class="slide-label">Technique 4 of 6</div>
-        <h2 class="slide-heading">Interleaving</h2>
-        <p class="slide-body">Mix different problem types and subjects. It feels harder but builds flexibility and deeper understanding than blocked practice.</p>
-        <div class="interleave-demo">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Technique 4 of 6</div>
+                <h2 class="slide-heading">Interleaving</h2>
+                <p class="slide-body">Mix different problem types and subjects. It feels harder but builds flexibility and deeper understanding than blocked practice.</p>
+            </div>
+            <div class="col-viz">
+                <div class="interleave-demo">
             <div class="interleave-block">
                 <div class="interleave-title">Blocked (common)</div>
                 <div class="blocks-row">
@@ -1541,15 +1432,19 @@
                 <div style="font-size:0.75rem; color:#2d6a2d; margin-top:0.6rem;">Feels harder. Much deeper learning.</div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-gray" id="s11">
-    <div class="slide-content">
-        <div class="slide-label">Technique 6 of 6</div>
-        <h2 class="slide-heading">Pomodoro Technique</h2>
-        <p class="slide-body">25 minutes of focused work, then a 5-minute break. The break lets your diffuse mode process what you just learned.</p>
-        <div class="pomo-visual">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Technique 6 of 6</div>
+                <h2 class="slide-heading">Pomodoro Technique</h2>
+                <p class="slide-body">25 minutes of focused work, then a 5-minute break. The break lets your diffuse mode process what you just learned.</p>
+            </div>
+            <div class="col-viz">
+                <div class="pomo-visual">
             <div class="pomo-block pomo-work">25 min work</div>
             <div class="pomo-arrow">→</div>
             <div class="pomo-block pomo-break">5 min break</div>
@@ -1562,18 +1457,24 @@
             <div class="pomo-arrow">→</div>
             <div class="pomo-block pomo-break" style="background:#c8e6c9; font-weight:700;">Long break</div>
         </div>
-        <div class="hbox" style="margin-top:1.25rem;">
+            </div>
+            <div class="col-note">
+                <div class="hbox" style="margin-top:1.25rem;">
             <p>After 4 cycles, take a 20-30 minute break. The rhythm matters. Start the timer and commit to the interval.</p>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-white" id="s10">
-    <div class="slide-content">
-        <div class="slide-label">Technique 5 of 6</div>
-        <h2 class="slide-heading">Sleep on It</h2>
-        <p class="slide-body">Sleep is when your brain consolidates what you studied, prunes weak connections, and strengthens the important ones.</p>
-        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Technique 5 of 6</div>
+                <h2 class="slide-heading">Sleep on It</h2>
+                <p class="slide-body">Sleep is when your brain consolidates what you studied, prunes weak connections, and strengthens the important ones.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
             <div class="card">
                 <div class="card-icon">📖</div>
                 <div class="card-title">Study before sleep</div>
@@ -1585,11 +1486,12 @@
                 <div class="card-desc">The brain replays and integrates the day's learning. Skipping sleep skips consolidation.</div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-accent" id="s29">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="part-number">05</div>
         <div class="part-label-big">How Learning Actually Works</div>
         <div class="part-sub">Cognition, epistemics, and the mindset that determines your ceiling</div>
@@ -1597,10 +1499,10 @@
 </section>
 
 <section class="slide slide-white" id="s30">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="slide-label">Learning Science</div>
         <h2 class="slide-heading">Desirable Difficulty</h2>
-        <p class="slide-body">Learning feels faster when it is easy. Retention is better when it is hard. Struggling to recall, working through confusion, varying practice conditions: these feel slower but produce deeper learning.</p>
+        <p class="slide-body">Easy studying feels productive while producing weak retention, and the harder work of recalling and varying your practice is what produces deep learning. The struggle is where learning actually happens.</p>
         <div class="hbox" style="margin-top:1.5rem;">
             <p><strong>Comfort is a false signal of progress.</strong> The feeling of fluency after re-reading is distinct from actually knowing something.</p>
         </div>
@@ -1608,11 +1510,14 @@
 </section>
 
 <section class="slide slide-gray" id="s31">
-    <div class="slide-content">
-        <div class="slide-label">Learning Science</div>
-        <h2 class="slide-heading">Metacognition</h2>
-        <p class="slide-body">Thinking about your thinking. High performers constantly monitor their own understanding.</p>
-        <div class="flip-scene" id="flip-meta" onclick="this.classList.toggle('flipped')">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Learning Science</div>
+                <h2 class="slide-heading">Metacognition</h2>
+                <p class="slide-body">Thinking about your thinking. High performers constantly monitor their own understanding.</p>
+            </div>
+            <div class="col-viz">
+                <div class="flip-scene" id="flip-meta" onclick="this.classList.toggle('flipped')">
             <div class="flip-card">
                 <div class="flip-front">
                     <div class="q">Do you actually know this, or do you just recognize it?</div>
@@ -1624,14 +1529,15 @@
                 </div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-white" id="s32">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="slide-label">Learning Science</div>
         <h2 class="slide-heading">Prior Knowledge as Foundation</h2>
-        <p class="slide-body">New information attaches to existing knowledge structures. The more you know about a domain, the faster you learn in it. Each new concept has more hooks to hang on.</p>
+        <p class="slide-body">New information attaches to existing knowledge, so the more you know about a domain, the faster you learn in it. Each new concept has more hooks to hang on.</p>
         <div class="hbox" style="margin-top:1.5rem;">
             <p>Building foundational knowledge early pays compounding dividends. Domain expertise means both breadth and speed.</p>
         </div>
@@ -1639,11 +1545,14 @@
 </section>
 
 <section class="slide slide-gray" id="s33">
-    <div class="slide-content">
-        <div class="slide-label">Learning Science</div>
-        <h2 class="slide-heading">Transfer of Learning</h2>
-        <p class="slide-body">The ability to apply knowledge in new contexts. Near transfer (similar situations) is common. Far transfer (very different domains) is hard and rare.</p>
-        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Learning Science</div>
+                <h2 class="slide-heading">Transfer of Learning</h2>
+                <p class="slide-body">Transfer is applying knowledge in new contexts, and near transfer to similar situations is common. Far transfer to very different domains is hard and rare.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
             <div class="card">
                 <div class="card-icon">↔️</div>
                 <div class="card-title">Near Transfer</div>
@@ -1655,11 +1564,12 @@
                 <div class="card-desc">Applying statistical thinking to medical decisions after learning it in economics. Rare. Built through varied practice across multiple contexts.</div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-white" id="s34">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="slide-label">Learning Science</div>
         <h2 class="slide-heading">Updating Beliefs</h2>
         <p class="slide-body">Learning requires changing your mind. Confirmation bias, seeking information that confirms what you already believe, is the single biggest obstacle to accurate learning.</p>
@@ -1670,11 +1580,14 @@
 </section>
 
 <section class="slide slide-gray" id="s21">
-    <div class="slide-content">
-        <div class="slide-label">Memory Technique</div>
-        <h2 class="slide-heading">The Memory Palace</h2>
-        <p class="slide-body">Memory champions don't have exceptional brains. They use exceptional techniques. The Method of Loci attaches information to vivid locations in a space you can mentally walk through.</p>
-        <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Memory Technique</div>
+                <h2 class="slide-heading">The Memory Palace</h2>
+                <p class="slide-body">Memory champions win through practiced technique that anyone can learn. The Method of Loci attaches information to vivid locations in a space you can mentally walk through.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
             <div class="card" style="text-align:center;">
                 <div class="card-icon">🚪</div>
                 <div class="card-title">Pick a familiar route</div>
@@ -1691,18 +1604,24 @@
                 <div class="card-desc">To recall, mentally walk the route and collect the items.</div>
             </div>
         </div>
-        <div class="hbox" style="margin-top:1.25rem;">
+            </div>
+            <div class="col-note">
+                <div class="hbox" style="margin-top:1.25rem;">
             <p>The brain's spatial memory evolved to be extraordinary. This technique piggybacks arbitrary information onto a system built to last.</p>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-white" id="s21b">
-    <div class="slide-content">
-        <div class="slide-label">Memory Technique</div>
-        <h2 class="slide-heading">The 30-Second Rule</h2>
-        <p class="slide-body">The first 30 seconds after learning something are the most critical window for encoding. Write down everything you remember before moving on. It dramatically increases retention.</p>
-        <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Memory Technique</div>
+                <h2 class="slide-heading">The 30-Second Rule</h2>
+                <p class="slide-body">The first 30 seconds after learning are the most critical window for encoding, so write down everything you remember before moving on. It dramatically increases retention.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
             <div class="card" style="text-align:center;">
                 <div class="card-icon">⏱️</div>
                 <div class="card-title">Just learned something?</div>
@@ -1719,18 +1638,24 @@
                 <div class="card-desc">This brief review interrupts the forgetting curve at its steepest point and begins consolidation.</div>
             </div>
         </div>
-        <div class="hbox" style="margin-top:1.25rem;">
+            </div>
+            <div class="col-note">
+                <div class="hbox" style="margin-top:1.25rem;">
             <p>30 seconds of active recall in the minutes after learning produces significantly more long-term retention than any amount of re-reading.</p>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-gray" id="s35">
-    <div class="slide-content">
-        <div class="slide-label">Learning Science</div>
-        <h2 class="slide-heading">The Protege Effect</h2>
-        <p class="slide-body">Teaching what you have learned is one of the most powerful consolidation tools. Explaining a concept forces you to identify gaps, organize your understanding, and retrieve everything you know.</p>
-        <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Learning Science</div>
+                <h2 class="slide-heading">The Protege Effect</h2>
+                <p class="slide-body">Teaching what you have learned is one of the most powerful consolidation tools. Explaining a concept forces you to identify gaps, organize your understanding, and retrieve everything you know.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
             <div class="card" style="text-align:center;">
                 <div class="card-icon">🗣</div>
                 <div class="card-title">Teach a friend</div>
@@ -1747,15 +1672,19 @@
                 <div class="card-desc">Out loud. Saying it forces your brain to produce complete, coherent explanations</div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-gray" id="s35b">
-    <div class="slide-content">
-        <div class="slide-label">The 2-Sigma Problem</div>
-        <h2 class="slide-heading">One-on-one tutoring is +2σ better.</h2>
-        <p class="slide-body">Benjamin Bloom's 1984 landmark study found that students with a personal tutor outperformed 98% of classroom students. He called it the "2-sigma problem": the effect is proven, but how do you scale it to everyone?</p>
-        <div style="margin-top:2rem; position:relative; padding-left:2.25rem; border-left:2px solid #e2e8f0;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">The 2-Sigma Problem</div>
+                <h2 class="slide-heading">One-on-one tutoring is +2σ better.</h2>
+                <p class="slide-body">Benjamin Bloom's 1984 landmark study found that students with a personal tutor outperformed 98% of classroom students. He called it the "2-sigma problem": the effect is proven, but how do you scale it to everyone?</p>
+            </div>
+            <div class="col-viz">
+                <div style="margin-top:2rem; position:relative; padding-left:2.25rem; border-left:2px solid #e2e8f0;">
             <div style="margin-bottom:1.5rem; position:relative;">
                 <div style="position:absolute; left:-2.625rem; top:0.2rem; width:0.75rem; height:0.75rem; background:#2d3748; border-radius:50%;"></div>
                 <div style="font-size:0.7rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#888; margin-bottom:0.2rem;">Antiquity - 1800s</div>
@@ -1781,22 +1710,23 @@
                 <div style="color:#666; font-size:0.9rem;">AI tutors provide instant feedback, adapt to your pace, never lose patience, and are available 24/7. The 2-sigma advantage is no longer a privilege.</div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-accent" id="s36">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="part-number">06</div>
         <div class="part-label-big">Reading List</div>
     </div>
 </section>
 
 <section class="slide slide-white" id="s37">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <span class="tag">Learning Science</span>
         <h2 class="slide-heading" style="margin-top:0.75rem;">A Mind for Numbers</h2>
         <h3 class="slide-subheading" style="font-weight:400; color:#888; margin-bottom:1.25rem;">Barbara Oakley</h3>
-        <p class="slide-body">The most practical book on the science of learning. Oakley was a self-described math-phobe who became an engineering professor by reverse-engineering how learning works. Covers focused vs. diffuse modes, chunking, procrastination, and spaced repetition, all grounded in neuroscience.</p>
+        <p class="slide-body">The most practical book on the science of learning, written by someone who went from math-phobe to engineering professor by reverse-engineering how learning works. It covers focused and diffuse modes, chunking, procrastination, and spaced repetition, all grounded in neuroscience.</p>
         <div class="hbox" style="margin-top:1.5rem;">
             <p><strong>Core idea:</strong> Anyone can learn anything hard. The obstacle is almost always method, not aptitude. The brain is trainable if you understand its operating system.</p>
         </div>
@@ -1804,7 +1734,7 @@
 </section>
 
 <section class="slide slide-gray" id="s38">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <span class="tag">Cognitive Psychology</span>
         <h2 class="slide-heading" style="margin-top:0.75rem;">Thinking, Fast and Slow</h2>
         <h3 class="slide-subheading" style="font-weight:400; color:#888; margin-bottom:1.25rem;">Daniel Kahneman</h3>
@@ -1816,7 +1746,7 @@
 </section>
 
 <section class="slide slide-white" id="s39">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <span class="tag">Memory</span>
         <h2 class="slide-heading" style="margin-top:0.75rem;">Moonwalking with Einstein</h2>
         <h3 class="slide-subheading" style="font-weight:400; color:#888; margin-bottom:1.25rem;">Joshua Foer</h3>
@@ -1828,7 +1758,7 @@
 </section>
 
 <section class="slide slide-gray" id="s40">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <span class="tag">Epistemics</span>
         <h2 class="slide-heading" style="margin-top:0.75rem;">The Scout Mindset</h2>
         <h3 class="slide-subheading" style="font-weight:400; color:#888; margin-bottom:1.25rem;">Julia Galef</h3>
@@ -1845,7 +1775,7 @@
 ============================================================ -->
 
 <section class="slide slide-kid slide-dark" id="k1">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="slide-label">Network School</div>
         <h1 class="slide-title">You Can Just<br>Learn Things</h1>
         <p class="slide-body">Learn how to learn.</p>
@@ -1853,7 +1783,7 @@
 </section>
 
 <section class="slide slide-kid slide-white" id="k2">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="slide-label">The Problem</div>
         <p class="big-quote">School never taught you <strong>how learning works.</strong></p>
         <p class="slide-body" style="margin-top:1.25rem;">Your brain is a real machine with real rules. Once you know the rules, learning gets easier and a lot of homework gets shorter.</p>
@@ -1861,10 +1791,13 @@
 </section>
 
 <section class="slide slide-kid slide-white" id="k4">
-    <div class="slide-content">
-        <div class="slide-label">The Trick</div>
-        <h2 class="slide-heading">The popular study tricks don't work.</h2>
-        <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">The Trick</div>
+                <h2 class="slide-heading">The popular study tricks don't work.</h2>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
             <div class="card" style="text-align:center; opacity:0.5;">
                 <div class="card-icon">📖</div>
                 <div class="card-title" style="text-decoration:line-through;">Re-reading</div>
@@ -1881,14 +1814,17 @@
                 <div class="card-desc">Works for the test tomorrow. Forgotten by Friday.</div>
             </div>
         </div>
-        <div class="hbox" style="margin-top:1.5rem;">
+            </div>
+            <div class="col-note">
+                <div class="hbox" style="margin-top:1.5rem;">
             <p>The tricks that actually work feel harder. That's how you know they're working.</p>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-accent" id="k22">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="part-number">01</div>
         <div class="part-label-big">The Brain and Learning</div>
         <div class="part-sub">What's physically happening inside as you learn</div>
@@ -1896,10 +1832,10 @@
 </section>
 
 <section class="slide slide-kid slide-white" id="k23">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="slide-label">Neurons</div>
         <h2 class="slide-heading">Practice strengthens the connection.</h2>
-        <p class="slide-body">Your brain has billions of cells called neurons. They send signals to each other across tiny gaps. Every time a signal crosses, that connection gets a little stronger and faster. Practice piano, those connections sharpen. Solve math, the math ones sharpen.</p>
+        <p class="slide-body">Your brain has billions of cells called neurons that send signals across tiny gaps. Every time a signal crosses, that connection gets a little stronger and faster, so practising piano or math sharpens those exact connections.</p>
         <div class="hbox" style="margin-top:1.25rem;">
             <p><strong>Hebb's Rule:</strong> Neurons that fire together, wire together.</p>
         </div>
@@ -1907,11 +1843,14 @@
 </section>
 
 <section class="slide slide-kid slide-gray" id="k24">
-    <div class="slide-content">
-        <div class="slide-label">Neuroplasticity</div>
-        <h2 class="slide-heading">Your brain physically changes shape.</h2>
-        <p class="slide-body">Your brain gives more space to whatever you practice the most. Scientists call this neuroplasticity, and it keeps working your whole life, even when you're old.</p>
-        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Neuroplasticity</div>
+                <h2 class="slide-heading">Your brain physically changes shape.</h2>
+                <p class="slide-body">Your brain gives more space to whatever you practice the most. Scientists call this neuroplasticity, and it keeps working your whole life, even when you're old.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
             <div class="card">
                 <div class="card-icon">🚕</div>
                 <div class="card-title">London cab drivers</div>
@@ -1923,15 +1862,19 @@
                 <div class="card-desc">Kids who play piano develop a bigger motor cortex for the fingers they use most. The brain builds whatever you use.</div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-dark" id="k-muscle">
-    <div class="slide-content">
-        <div class="slide-label">Brain Muscle</div>
-        <h2 class="slide-heading">Your brain works like a muscle.</h2>
-        <p class="slide-body">Lift weights, your muscles get tiny tears, then heal stronger. Brains do the same. Try a hard problem, the brain stretches. Sleep heals it. Tomorrow you're a little smarter than yesterday.</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Brain Muscle</div>
+                <h2 class="slide-heading">Your brain works like a muscle.</h2>
+                <p class="slide-body">Lift weights and your muscles get tiny tears, then heal stronger, and your brain does the same when you try a hard problem. Sleep heals it, so tomorrow you are a little smarter than yesterday.</p>
+            </div>
+            <div class="col-viz">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem;">
             <div class="hbox">
                 <p><strong>🏋️ Muscle</strong><br>Hard work, then rest, then stronger.</p>
             </div>
@@ -1939,15 +1882,19 @@
                 <p><strong>🧠 Brain</strong><br>Hard thinking, then sleep, then stronger.</p>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-dark" id="k-overload">
-    <div class="slide-content">
-        <div class="slide-label">Just Right</div>
-        <h2 class="slide-heading">A tiny bit harder than yesterday.</h2>
-        <p class="slide-body">Doing only easy stuff, brain coasts. Doing too-hard stuff, brain panics. The sweet spot is one notch harder than what you can do today. That's where you grow fastest.</p>
-        <div style="margin-top:1.5rem;background:rgba(255,255,255,0.08);border-radius:12px;padding:1.25rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Just Right</div>
+                <h2 class="slide-heading">A tiny bit harder than yesterday.</h2>
+                <p class="slide-body">Only-easy work makes your brain coast and too-hard work makes it panic, so the sweet spot is one notch harder than what you can do today. That is where you grow fastest.</p>
+            </div>
+            <div class="col-viz">
+                <div style="margin-top:1.5rem;background:rgba(255,255,255,0.08);border-radius:12px;padding:1.25rem;">
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border-radius:8px;overflow:hidden;text-align:center;">
                 <div style="background:rgba(255,255,255,0.06);padding:1rem 0.75rem;">
                     <div style="font-size:1.4rem;margin-bottom:0.4rem;">😴</div>
@@ -1966,15 +1913,19 @@
                 </div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-white" id="k25">
-    <div class="slide-content">
-        <div class="slide-label">Myelin</div>
-        <h2 class="slide-heading">Practice insulates the connection.</h2>
-        <p class="slide-body">When you practice something a lot, your brain wraps the connection in a fatty coating called myelin. Like the rubber on a phone charger, it speeds the signal up. That's why riding a bike feels impossible the first day and effortless after a year.</p>
-        <div class="card-grid card-grid-2" style="margin-top:1.25rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Myelin</div>
+                <h2 class="slide-heading">Practice insulates the connection.</h2>
+                <p class="slide-body">Practise something a lot and your brain wraps the connection in a fatty coating called myelin that speeds the signal up, like the rubber on a phone charger. That is why riding a bike feels impossible the first day and effortless after a year.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-2" style="margin-top:1.25rem;">
             <div class="card">
                 <div class="card-icon">🐌</div>
                 <div class="card-title">Unmyelinated</div>
@@ -1986,11 +1937,12 @@
                 <div class="card-desc">Fast and automatic. Frees up your brain to think about other things while you do it.</div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-accent" id="k12">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="part-number">02</div>
         <div class="part-label-big">Two Modes of Thinking</div>
         <div class="part-sub">Real learning uses both</div>
@@ -1998,10 +1950,13 @@
 </section>
 
 <section class="slide slide-kid slide-white" id="k13">
-    <div class="slide-content">
-        <div class="slide-label">Two Modes</div>
-        <h2 class="slide-heading">Your brain has two settings.</h2>
-        <div class="modes-wrap">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Two Modes</div>
+                <h2 class="slide-heading">Your brain has two settings.</h2>
+            </div>
+            <div class="col-viz">
+                <div class="modes-wrap">
             <div class="mode-panel focused-panel">
                 <div class="mode-icon">🎯</div>
                 <div class="mode-name">Focused Mode</div>
@@ -2023,14 +1978,15 @@
                 </div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-gray" id="k14">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="slide-label">Stuck?</div>
         <p class="big-quote">If you can't solve it, <strong>walk away.</strong></p>
-        <p class="slide-body" style="margin-top:1.25rem;">Take a break. Pet the dog, eat a snack, look out the window. Your brain keeps thinking in the background. The answer often pops up while you're brushing your teeth.</p>
+        <p class="slide-body" style="margin-top:1.25rem;">Take a break to pet the dog, grab a snack, or look out the window while your brain keeps working in the background. The answer often pops up while you are brushing your teeth.</p>
         <div class="hbox" style="margin-top:1.5rem;">
             <p>Breaks are part of the work, not laziness.</p>
         </div>
@@ -2038,11 +1994,14 @@
 </section>
 
 <section class="slide slide-kid slide-gray" id="k26">
-    <div class="slide-content">
-        <div class="slide-label">Dopamine</div>
-        <h2 class="slide-heading">Your brain rewards learning with dopamine.</h2>
-        <p class="slide-body">When you figure something out, finish a problem, or beat a level, your brain releases a chemical called dopamine. It tags that moment as worth repeating, and it's the engine behind motivation and curiosity.</p>
-        <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Dopamine</div>
+                <h2 class="slide-heading">Your brain rewards learning with dopamine.</h2>
+                <p class="slide-body">When you figure something out, finish a problem, or beat a level, your brain releases a chemical called dopamine. It tags that moment as worth repeating, and it's the engine behind motivation and curiosity.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
             <div class="card" style="text-align:center;">
                 <div class="card-icon">🏆</div>
                 <div class="card-title">Small wins</div>
@@ -2059,11 +2018,12 @@
                 <div class="card-desc">Stuff you actually want to know sticks fast. Stuff that's boring slides off.</div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-white" id="k27">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="slide-label">Stress and Cortisol</div>
         <h2 class="slide-heading">A little stress helps. A lot hurts.</h2>
         <p class="slide-body">A little nervous before a test sharpens you up. But long-term stress floods the brain with a chemical called cortisol, which actually shrinks the hippocampus, the part of the brain that builds new memories.</p>
@@ -2074,11 +2034,14 @@
 </section>
 
 <section class="slide slide-kid slide-gray" id="k28">
-    <div class="slide-content">
-        <div class="slide-label">Sleep</div>
-        <h2 class="slide-heading">Sleep saves what you learned.</h2>
-        <p class="slide-body">While you sleep, your brain replays the day. The hippocampus moves new memories into long-term storage in the cortex, like saving a file from a notepad onto a hard drive. No sleep, no save.</p>
-        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Sleep</div>
+                <h2 class="slide-heading">Sleep saves what you learned.</h2>
+                <p class="slide-body">While you sleep, your brain replays the day and moves new memories into long-term storage, like saving a file onto a hard drive. No sleep, no save.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
             <div class="card card-dark">
                 <div class="card-icon">🔁</div>
                 <div class="card-title">Memory replay</div>
@@ -2090,14 +2053,17 @@
                 <div class="card-desc">Sleep also flushes waste out of the brain through the glymphatic system. Like emptying the trash on a computer.</div>
             </div>
         </div>
-        <div class="hbox" style="margin-top:1.25rem;">
+            </div>
+            <div class="col-note">
+                <div class="hbox" style="margin-top:1.25rem;">
             <p>Pulling an all-nighter is the worst thing you can do before a test.</p>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-accent" id="k15">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="part-number">03</div>
         <div class="part-label-big">Memory</div>
         <div class="part-sub">How you remember and why you forget</div>
@@ -2105,19 +2071,22 @@
 </section>
 
 <section class="slide slide-kid slide-white" id="k16">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="slide-label">Memory</div>
         <p class="big-quote">Memory is <strong>rebuilt every time.</strong></p>
-        <p class="slide-body" style="margin-top:1.25rem;">You don't pull a memory out like a video file. Your brain rebuilds it from pieces. That's why a story changes a little every time you tell it.</p>
+        <p class="slide-body" style="margin-top:1.25rem;">You do not pull a memory out like a video file; your brain rebuilds it from pieces. That is why a story changes a little every time you tell it.</p>
     </div>
 </section>
 
 <section class="slide slide-kid slide-gray" id="k17a">
-    <div class="slide-content">
-        <div class="slide-label">Memory · Stage 1 of 3</div>
-        <h2 class="slide-heading">Encoding</h2>
-        <p class="slide-body">Encoding is how information gets into memory in the first place, and it depends on attention. Doing homework with the TV on? Your brain isn't really saving it. Full focus is the only way stuff gets in deep.</p>
-        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Memory · Stage 1 of 3</div>
+                <h2 class="slide-heading">Encoding</h2>
+                <p class="slide-body">Encoding is how information first gets into memory, and it depends on full attention. Doing homework with the TV on means your brain is not really saving it.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
             <div class="card">
                 <div class="card-icon">🎯</div>
                 <div class="card-title">Full attention</div>
@@ -2129,15 +2098,19 @@
                 <div class="card-desc">Connect new stuff to something you already know. The more hooks, the easier to remember later.</div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-white" id="k17b">
-    <div class="slide-content">
-        <div class="slide-label">Memory · Stage 2 of 3</div>
-        <h2 class="slide-heading">Consolidation</h2>
-        <p class="slide-body">Right after you learn something, the memory is wobbly. Consolidation is how the brain makes it permanent, and it happens mostly during sleep. That's why reviewing the night before a test beats reviewing the morning of.</p>
-        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Memory · Stage 2 of 3</div>
+                <h2 class="slide-heading">Consolidation</h2>
+                <p class="slide-body">Right after you learn something the memory is wobbly, and consolidation makes it permanent, mostly during sleep. That is why reviewing the night before a test beats reviewing the morning of.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
             <div class="card card-dark">
                 <div class="card-icon">😴</div>
                 <div class="card-title">Sleep does the work</div>
@@ -2149,18 +2122,19 @@
                 <div class="card-desc">Review, sleep, then test. Not test, then sleep, then forget.</div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-gray" id="k17c">
-    <div class="slide-content">
-        <div class="slide-label">Memory · Stage 3 of 3</div>
-        <h2 class="slide-heading">Retrieval</h2>
-        <p class="slide-body">Every time you pull a memory out, you rewrite it stronger. Retrieval is the workout. Closing the book and trying to write the answer from memory beats reading it five more times.</p>
-        <div class="hbox" style="margin-top:1.5rem;">
-            <p>The act of remembering is the workout. Each rep makes the next one easier.</p>
-        </div>
-        <div class="card-grid card-grid-2" style="margin-top:1.25rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Memory · Stage 3 of 3</div>
+                <h2 class="slide-heading">Retrieval</h2>
+                <p class="slide-body">Every time you pull a memory out, you rewrite it stronger, so retrieval is the real workout. Closing the book and writing the answer from memory beats reading it five more times.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-2" style="margin-top:1.25rem;">
             <div class="card card-dark">
                 <div class="card-icon">🧪</div>
                 <div class="card-title">Quiz yourself</div>
@@ -2172,33 +2146,46 @@
                 <div class="card-desc">Guessing wrong, then seeing the right answer, sticks even better than getting it right the first time.</div>
             </div>
         </div>
-    </div>
+            </div>
+            <div class="col-note">
+                <div class="hbox" style="margin-top:1.5rem;">
+            <p>The act of remembering is the workout. Each rep makes the next one easier.</p>
+        </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-white" id="k18">
-    <div class="slide-content">
-        <div class="slide-label">Working Memory</div>
-        <h2 class="slide-heading">Your brain holds about 4 things at once.</h2>
-        <p class="slide-body">Try to remember a phone number while someone tells you their name and the dog barks. Stuff falls off. That's normal. Click to fill up the slots.</p>
-        <div class="wm-slots" id="wm-slots-k">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Working Memory</div>
+                <h2 class="slide-heading">Your brain holds about 4 things at once.</h2>
+                <p class="slide-body">Try to remember a phone number while someone says their name and the dog barks, and stuff falls off. That is normal, so click to fill up the slots.</p>
+            </div>
+            <div class="col-viz">
+                <div class="wm-slots" id="wm-slots-k">
             <div class="wm-slot" id="wmk0">empty</div>
             <div class="wm-slot" id="wmk1">empty</div>
             <div class="wm-slot" id="wmk2">empty</div>
             <div class="wm-slot" id="wmk3">empty</div>
         </div>
-        <div class="wm-status" id="wm-status-k">0 / 4 slots used</div>
-        <div style="display:flex; gap:0.75rem; margin-top:1rem;">
+                <div class="wm-status" id="wm-status-k">0 / 4 slots used</div>
+                <div style="display:flex; gap:0.75rem; margin-top:1rem;">
             <button class="btn" onclick="addWMItemKid()">Add Item</button>
             <button class="btn btn-outline" onclick="resetWMKid()">Reset</button>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-gray" id="k19">
-    <div class="slide-content">
-        <div class="slide-label">Memory Types</div>
-        <h2 class="slide-heading">Long-Term and Procedural Memory</h2>
-        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Memory Types</div>
+                <h2 class="slide-heading">Long-Term and Procedural Memory</h2>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
             <div class="card card-dark">
                 <div class="card-icon">🗄</div>
                 <div class="card-title">Long-Term Memory</div>
@@ -2210,14 +2197,17 @@
                 <div class="card-desc">Skills your body remembers: riding a bike, tying shoes, swimming. Built through repetition. Once it's in, you barely lose it.</div>
             </div>
         </div>
-        <div class="hbox" style="margin-top:1.25rem;">
+            </div>
+            <div class="col-note">
+                <div class="hbox" style="margin-top:1.25rem;">
             <p>Once a small thing is mastered, you can group it as one chunk and stop using a slot for each piece.</p>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-accent" id="k5">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="part-number">04</div>
         <div class="part-label-big">How Your Brain Learns</div>
         <div class="part-sub">6 techniques that actually work, backed by research</div>
@@ -2225,24 +2215,31 @@
 </section>
 
 <section class="slide slide-kid slide-white" id="k6">
-    <div class="slide-content">
-        <div class="slide-label">Tool 1 of 6</div>
-        <h2 class="slide-heading">Chunk it up.</h2>
-        <p class="slide-body">Big things break into small things. Your brain holds three chunks easier than eleven loose pieces.</p>
-        <div class="chunk-demo">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Tool 1 of 6</div>
+                <h2 class="slide-heading">Chunk it up.</h2>
+                <p class="slide-body">Big things break into small things. Your brain holds three chunks easier than eleven loose pieces.</p>
+            </div>
+            <div class="col-viz">
+                <div class="chunk-demo">
             <div class="chunk-label" id="chunk-label-k">Loose digits: hard to remember</div>
             <div class="chunk-display" id="chunk-display-k">1 8 0 0 5 5 5 1 2 1 2</div>
             <button class="btn" onclick="toggleChunkKid()">Chunk It</button>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-white" id="k8">
-    <div class="slide-content">
-        <div class="slide-label">Tool 3 of 6</div>
-        <h2 class="slide-heading">Quiz yourself.</h2>
-        <p class="slide-body">Don't just re-read the notes. Cover them up and see what you can remember. The struggle is what builds the memory.</p>
-        <div class="flip-scene" id="flip-scene-k" onclick="this.classList.toggle('flipped')">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Tool 3 of 6</div>
+                <h2 class="slide-heading">Quiz yourself.</h2>
+                <p class="slide-body">Do not just re-read the notes; cover them up and see what you can remember. The struggle is what builds the memory.</p>
+            </div>
+            <div class="col-viz">
+                <div class="flip-scene" id="flip-scene-k" onclick="this.classList.toggle('flipped')">
             <div class="flip-card">
                 <div class="flip-front">
                     <div class="q">Why does quizzing beat re-reading?</div>
@@ -2254,15 +2251,15 @@
                 </div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-white" id="k20">
-    <div class="slide-content">
-        <div class="slide-label">Forgetting Curve</div>
-        <h2 class="slide-heading">You forget fast. Reviews fix it.</h2>
-        <p class="slide-body">Half of what you learn today is gone tomorrow. Most of it gone in a week. Quick reviews stop the slide.</p>
-        <div class="curve-wrap">
+    <div class="slide-content curve-slide">
+            <div class="slide-label">Forgetting Curve</div>
+            <h2 class="slide-heading">You forget fast. Reviews fix it.</h2>
+            <div class="curve-wrap">
             <svg viewBox="0 0 600 220" id="curve-svg-k">
                 <line x1="40" y1="10" x2="40" y2="185" stroke="#ccc" stroke-width="1.5"/>
                 <line x1="40" y1="185" x2="590" y2="185" stroke="#ccc" stroke-width="1.5"/>
@@ -2299,15 +2296,19 @@
                 <button class="btn btn-sm btn-outline" onclick="hideCurveReviewKid()">Reset</button>
             </div>
         </div>
-    </div>
+            <p class="slide-body">Half of what you learn today is gone tomorrow, and most of it within a week. Quick reviews stop the slide.</p>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-gray" id="k7">
-    <div class="slide-content">
-        <div class="slide-label">Tool 2 of 6</div>
-        <h2 class="slide-heading">Space your reviews out.</h2>
-        <p class="slide-body">Review tomorrow, then a week later, then a month. Each review is short. Way better than one giant cram session.</p>
-        <div class="spacing-timeline">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Tool 2 of 6</div>
+                <h2 class="slide-heading">Space your reviews out.</h2>
+                <p class="slide-body">Review tomorrow, then a week later, then a month, with each review kept short. It works far better than one giant cram session.</p>
+            </div>
+            <div class="col-viz">
+                <div class="spacing-timeline">
             <div class="timeline-line">
                 <div class="timeline-dot" style="left:0%">
                     <span class="dot-label">Learn</span>
@@ -2331,18 +2332,24 @@
                 </div>
             </div>
         </div>
-        <div class="hbox">
+            </div>
+            <div class="col-note">
+                <div class="hbox">
             <p>Like brushing teeth: short, every day. Not one five-hour scrub once a year.</p>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-gray" id="k9">
-    <div class="slide-content">
-        <div class="slide-label">Tool 4 of 6</div>
-        <h2 class="slide-heading">Mix it up.</h2>
-        <p class="slide-body">Doing twenty of the same problem feels good but teaches less. Mixing problem types feels harder but sticks longer. Same with sports: a kid who plays soccer, basketball, and swims gets a better all-around athlete than one who only plays soccer.</p>
-        <div class="interleave-demo">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Tool 4 of 6</div>
+                <h2 class="slide-heading">Mix it up.</h2>
+                <p class="slide-body">Doing twenty of the same problem feels smooth yet teaches less, while mixing problem types feels harder and sticks longer. It is like sports: playing soccer, basketball, and swimming builds a better all-around athlete than soccer alone.</p>
+            </div>
+            <div class="col-viz">
+                <div class="interleave-demo">
             <div class="interleave-block">
                 <div class="interleave-title">All the same (easy)</div>
                 <div class="blocks-row">
@@ -2362,15 +2369,19 @@
                 <div style="font-size:0.75rem; color:#2d6a2d; margin-top:0.6rem;">Feels harder. More stick.</div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-gray" id="k11">
-    <div class="slide-content">
-        <div class="slide-label">Tool 6 of 6</div>
-        <h2 class="slide-heading">25 on, 5 off.</h2>
-        <p class="slide-body">Set a timer. 25 minutes of full focus, no phone. Then a real 5 minute break. Walk, stretch, snack. Do it again. Way better than two hours of half-trying.</p>
-        <div class="pomo-visual">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Tool 6 of 6</div>
+                <h2 class="slide-heading">25 on, 5 off.</h2>
+                <p class="slide-body">Set a timer for 25 minutes of full focus with no phone, then take a real 5 minute break to walk, stretch, or snack. Repeating that beats two hours of half-trying.</p>
+            </div>
+            <div class="col-viz">
+                <div class="pomo-visual">
             <div class="pomo-block pomo-work">25 min work</div>
             <div class="pomo-arrow">→</div>
             <div class="pomo-block pomo-break">5 min break</div>
@@ -2383,18 +2394,24 @@
             <div class="pomo-arrow">→</div>
             <div class="pomo-block pomo-break" style="background:#c8e6c9; font-weight:700;">Long break</div>
         </div>
-        <div class="hbox" style="margin-top:1.25rem;">
+            </div>
+            <div class="col-note">
+                <div class="hbox" style="margin-top:1.25rem;">
             <p>After 4 rounds, take a longer break (20 minutes). The break is part of the plan, not a reward you earn.</p>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-white" id="k10">
-    <div class="slide-content">
-        <div class="slide-label">Tool 5 of 6</div>
-        <h2 class="slide-heading">Sleep on it.</h2>
-        <p class="slide-body">Look over your notes before bed. Your brain processes what you reviewed last. Sleep is when learning gets locked in.</p>
-        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Tool 5 of 6</div>
+                <h2 class="slide-heading">Sleep on it.</h2>
+                <p class="slide-body">Look over your notes before bed so your brain processes them last. Sleep is when learning gets locked in.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
             <div class="card">
                 <div class="card-icon">📖</div>
                 <div class="card-title">Quick review at night</div>
@@ -2406,11 +2423,12 @@
                 <div class="card-desc">No sleep, no save. All-nighters lose more than they gain.</div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-accent" id="k29">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="part-number">05</div>
         <div class="part-label-big">How Learning Actually Works</div>
         <div class="part-sub">The mindset that decides how far you'll go</div>
@@ -2418,10 +2436,10 @@
 </section>
 
 <section class="slide slide-kid slide-white" id="k30">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="slide-label">Desirable Difficulty</div>
         <h2 class="slide-heading">If it feels easy, you're not learning much.</h2>
-        <p class="slide-body">Re-reading the same chapter feels great, and you barely learned anything. Quizzing yourself feels rough, and you learned a lot. Researchers call this "desirable difficulty": the struggle is exactly the part where learning happens.</p>
+        <p class="slide-body">Re-reading a chapter feels great while teaching you little, and quizzing yourself feels rough while teaching you a lot. Researchers call this desirable difficulty: the struggle is exactly where learning happens.</p>
         <div class="hbox" style="margin-top:1.5rem;">
             <p><strong>Comfortable doesn't mean learning.</strong> Pushing through the "I don't get it yet" phase is when the brain actually grows.</p>
         </div>
@@ -2429,11 +2447,14 @@
 </section>
 
 <section class="slide slide-kid slide-gray" id="k31">
-    <div class="slide-content">
-        <div class="slide-label">Metacognition</div>
-        <h2 class="slide-heading">Think about your thinking.</h2>
-        <p class="slide-body">Metacognition is the habit of watching your own brain at work. The strongest learners constantly ask themselves: do I actually know this, or do I just think I do?</p>
-        <div class="flip-scene" id="flip-meta-k" onclick="this.classList.toggle('flipped')">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Metacognition</div>
+                <h2 class="slide-heading">Think about your thinking.</h2>
+                <p class="slide-body">Metacognition is the habit of watching your own brain at work. The strongest learners constantly ask themselves: do I actually know this, or do I just think I do?</p>
+            </div>
+            <div class="col-viz">
+                <div class="flip-scene" id="flip-meta-k" onclick="this.classList.toggle('flipped')">
             <div class="flip-card">
                 <div class="flip-front">
                     <div class="q">Do you actually know it, or do you just recognize it?</div>
@@ -2445,14 +2466,15 @@
                 </div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-white" id="k32">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="slide-label">Build a Base</div>
         <h2 class="slide-heading">Knowing more helps you learn more.</h2>
-        <p class="slide-body">Already love dinosaurs? New dinosaur facts stick fast. Brand new topic with nothing to attach to? Slow at first. Building a base early makes everything later much faster.</p>
+        <p class="slide-body">If you already love dinosaurs, new dinosaur facts stick fast, while a brand new topic is slow at first. Building a base early makes everything later much faster.</p>
         <div class="hbox" style="margin-top:1.5rem;">
             <p>That's why reading lots of different stuff as a kid pays off forever. More hooks, more memory.</p>
         </div>
@@ -2460,11 +2482,14 @@
 </section>
 
 <section class="slide slide-kid slide-gray" id="k33">
-    <div class="slide-content">
-        <div class="slide-label">Transfer of Learning</div>
-        <h2 class="slide-heading">Using a skill somewhere new.</h2>
-        <p class="slide-body">The real test of learning is using a skill in a place you didn't practice it. Researchers split this into two kinds: near transfer (easy) and far transfer (rare and powerful).</p>
-        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Transfer of Learning</div>
+                <h2 class="slide-heading">Using a skill somewhere new.</h2>
+                <p class="slide-body">The real test of learning is using a skill in a place you didn't practice it. Researchers split this into two kinds: near transfer (easy) and far transfer (rare and powerful).</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
             <div class="card">
                 <div class="card-icon">↔️</div>
                 <div class="card-title">Near Transfer</div>
@@ -2476,14 +2501,15 @@
                 <div class="card-desc">You learned chess strategy. You use it to plan a school project. Totally different world, same thinking. Hard to pull off, but huge when it works.</div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-white" id="k34">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="slide-label">Updating Beliefs</div>
         <h2 class="slide-heading">Change your mind when the evidence changes.</h2>
-        <p class="slide-body">Real learning means being okay with "I was wrong." Confirmation bias, only seeking out things that prove what you already believe, is the biggest single block to learning. People who refuse to update never get smarter. People who do, do.</p>
+        <p class="slide-body">Real learning means being okay with being wrong, because confirmation bias, only seeking things that prove what you already believe, is the biggest block to learning. People who update get smarter, and people who refuse stay stuck.</p>
         <div class="hbox" style="margin-top:1.5rem;">
             <p>The goal isn't to be right today. It's to be <strong>more accurate tomorrow.</strong></p>
         </div>
@@ -2491,11 +2517,14 @@
 </section>
 
 <section class="slide slide-kid slide-gray" id="k21">
-    <div class="slide-content">
-        <div class="slide-label">Memory Trick</div>
-        <h2 class="slide-heading">The Memory Palace</h2>
-        <p class="slide-body">World memory champs use this. Pick a place you know really well, like your bedroom. Then "place" each thing you want to remember in spots around the room. To recall, walk through the room in your head.</p>
-        <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Memory Trick</div>
+                <h2 class="slide-heading">The Memory Palace</h2>
+                <p class="slide-body">World memory champs pick a place they know well, like a bedroom, and place each thing to remember in spots around the room. To recall it later, they walk through the room in their head.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
             <div class="card" style="text-align:center;">
                 <div class="card-icon">🚪</div>
                 <div class="card-title">Pick a place</div>
@@ -2512,18 +2541,24 @@
                 <div class="card-desc">Mentally walk through, picking up each thing on the way.</div>
             </div>
         </div>
-        <div class="hbox" style="margin-top:1.25rem;">
+            </div>
+            <div class="col-note">
+                <div class="hbox" style="margin-top:1.25rem;">
             <p>Brains are amazing at remembering places. This trick uses that to remember anything.</p>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-white" id="k21b">
-    <div class="slide-content">
-        <div class="slide-label">30-Second Rule</div>
-        <h2 class="slide-heading">Right after learning, write it down.</h2>
-        <p class="slide-body">Just heard something cool? Stop for 30 seconds. Write what you remember in your own words. Don't peek at the source. This locks it in way better than reading it again.</p>
-        <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">30-Second Rule</div>
+                <h2 class="slide-heading">Right after learning, write it down.</h2>
+                <p class="slide-body">Just heard something cool? Stop for 30 seconds and write what you remember in your own words without peeking, which locks it in far better than reading it again.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
             <div class="card" style="text-align:center;">
                 <div class="card-icon">⏱️</div>
                 <div class="card-title">Pause</div>
@@ -2540,15 +2575,19 @@
                 <div class="card-desc">30 seconds of recall now beats 10 minutes of re-reading later.</div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-gray" id="k35">
-    <div class="slide-content">
-        <div class="slide-label">Teach It</div>
-        <h2 class="slide-heading">Teaching is the best way to learn.</h2>
-        <p class="slide-body">Try to explain what you learned to your little sibling, your grandma, your dog, or just out loud to yourself. The questions and stumbles show exactly what you don't really know yet.</p>
-        <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
+    <div class="slide-content split">
+            <div class="col-text">
+                <div class="slide-label">Teach It</div>
+                <h2 class="slide-heading">Teaching is the best way to learn.</h2>
+                <p class="slide-body">Try to explain what you learned to your little sibling, your grandma, your dog, or just out loud to yourself. The questions and stumbles show exactly what you don't really know yet.</p>
+            </div>
+            <div class="col-viz">
+                <div class="card-grid card-grid-3" style="margin-top:1.5rem;">
             <div class="card" style="text-align:center;">
                 <div class="card-icon">🗣</div>
                 <div class="card-title">Tell a friend</div>
@@ -2565,14 +2604,15 @@
                 <div class="card-desc">Saying it forces real, complete sentences. Mumbling shows you're faking it.</div>
             </div>
         </div>
-    </div>
+            </div>
+        </div>
 </section>
 
 <section class="slide slide-kid slide-gray" id="k35b">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="slide-label">The 2-Sigma Problem</div>
         <h2 class="slide-heading">A personal tutor is one of the strongest tools we know.</h2>
-        <p class="slide-body">In 1984, researcher Benjamin Bloom found that kids with a one-on-one tutor outperformed 98% of kids in normal classrooms. He called it the "2-sigma problem": the effect is huge, but how do you give every kid a tutor? In 2026, AI tutors finally make it possible at scale.</p>
+        <p class="slide-body">In 1984, Benjamin Bloom found that kids with a one-on-one tutor outperformed 98% of kids in normal classrooms, a gap he called the 2-sigma problem: huge, but how do you give every kid a tutor? In 2026, AI tutors finally make it possible at scale.</p>
         <div class="hbox" style="margin-top:1.5rem;">
             <p>One teacher for one student, with instant feedback at your pace, is a learning advantage that used to belong only to royalty.</p>
         </div>
@@ -2580,18 +2620,18 @@
 </section>
 
 <section class="slide slide-kid slide-accent" id="k36">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="part-number">06</div>
         <div class="part-label-big">Books to Read</div>
     </div>
 </section>
 
 <section class="slide slide-kid slide-white" id="k37">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <span class="tag">Learning</span>
         <h2 class="slide-heading" style="margin-top:0.75rem;">Learning How to Learn</h2>
         <h3 class="slide-subheading" style="font-weight:400; color:#888; margin-bottom:1.25rem;">Barbara Oakley (kids and teens edition)</h3>
-        <p class="slide-body">Yes, this exists, and it's written for you. Same science as the grown-up version, just shorter and clearer. Covers focus, breaks, chunks, and beating procrastination.</p>
+        <p class="slide-body">Yes, this exists and it is written for you, with the same science as the grown-up version, just shorter and clearer. It covers focus, breaks, chunks, and beating procrastination.</p>
         <div class="hbox" style="margin-top:1.5rem;">
             <p><strong>Big idea:</strong> No one is born good at school. Anyone can get good with the right tools.</p>
         </div>
@@ -2599,11 +2639,11 @@
 </section>
 
 <section class="slide slide-kid slide-gray" id="k38">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <span class="tag">Mindset</span>
         <h2 class="slide-heading" style="margin-top:0.75rem;">Mindset</h2>
         <h3 class="slide-subheading" style="font-weight:400; color:#888; margin-bottom:1.25rem;">Carol Dweck</h3>
-        <p class="slide-body">There's a "fixed mindset" (I'm just bad at math) and a "growth mindset" (I haven't figured out math yet). Kids with the growth version go way further. The book shows why and how to switch.</p>
+        <p class="slide-body">A fixed mindset says I am just bad at math, while a growth mindset says I have not figured it out yet, and kids with the growth version go much further. The book shows why and how to switch.</p>
         <div class="hbox" style="margin-top:1.5rem;">
             <p><strong>Big idea:</strong> Smart isn't a thing you are. It's a thing you build.</p>
         </div>
@@ -2611,7 +2651,7 @@
 </section>
 
 <section class="slide slide-kid slide-white" id="k39">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <span class="tag">Memory</span>
         <h2 class="slide-heading" style="margin-top:0.75rem;">Moonwalking with Einstein</h2>
         <h3 class="slide-subheading" style="font-weight:400; color:#888; margin-bottom:1.25rem;">Joshua Foer</h3>
@@ -2639,10 +2679,10 @@
 </section>
 
 <section class="slide slide-shared slide-dark" id="s41">
-    <div class="slide-content">
+    <div class="slide-content centered">
         <div class="slide-label">End</div>
         <h1 class="slide-title" style="font-size: clamp(2rem, 5vw, 3.5rem);">You can just learn things.</h1>
-        <p class="slide-body" style="margin-top:1.25rem;">Now you know how. The techniques are simple. The science is clear. The only variable is whether you use them.</p>
+        <p class="slide-body" style="margin-top:1.25rem;">Now you know how, and the techniques are simple and the science is clear. The only variable is whether you use them.</p>
         <div style="margin-top:2rem; display:flex; flex-wrap:wrap; gap:0.5rem;">
             <span style="background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.7); padding:0.4rem 0.9rem; border-radius:6px; font-size:0.82rem;">Chunking</span>
             <span style="background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.7); padding:0.4rem 0.9rem; border-radius:6px; font-size:0.82rem;">Spaced Repetition</span>
@@ -2659,7 +2699,7 @@
     </div>
 </section>
 <footer class="slide-footer">
-    Veronica vrn.eth · Network School · May 2026
+    Veronica vrn.eth · Network School
     <a href="https://github.com/vrnvrn/justlearnthings" target="_blank" rel="noopener" style="color:inherit;opacity:0.6;margin-left:1rem;vertical-align:middle;" aria-label="GitHub">
         <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor" style="display:inline-block;vertical-align:middle;"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
     </a>
